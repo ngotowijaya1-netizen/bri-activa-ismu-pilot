@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACTIVA — Diagnostik API</title>
+<style>
+:root{--ink:#14253D;--muted:#5B6B80;--line:#D7DFE9;--bg:#F2F5F9;--surface:#fff;--ok:#1F7A4D;--bad:#B42318;--warn:#9A5B00;--blue:#0857C3;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--ink:#E6EDF6;--muted:#9AABC0;--line:#2A3B57;--bg:#0D1625;--surface:#152238;--ok:#4CC38A;--bad:#F2836F;--warn:#F0B44C;--blue:#6BA6F5;color-scheme:dark}}
+body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+main{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:21px;margin:0 0 6px}.sub{color:var(--muted);font-size:13.5px}
+button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:10px 16px;background:var(--blue);color:#fff;cursor:pointer}
+button:disabled{opacity:.5}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface);margin-top:14px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.PASS{color:var(--ok);font-weight:700}.FAIL{color:var(--bad);font-weight:700}.SKIP,.INFO{color:var(--warn);font-weight:700}
+textarea{width:100%;min-height:160px;font:12px/1.4 ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);box-sizing:border-box}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>Diagnostik API ACTIVA</h1>
+<p class="sub">Menguji komunikasi browser ini ke Apps Script yang sebenarnya: POST lintas-origin, redirect, CORS, JSON, token, ukuran payload, dan pemulihan saat jawaban server hilang. Tidak menulis data bisnis.</p>
+<p class="sub" id="cfg"></p>
+<div class="row"><button id="runA">Jalankan uji tanpa login</button><span id="gbtn"></span><button id="runB" disabled>Jalankan uji dengan login</button></div>
+<div class="tbl"><table><thead><tr><th>Uji</th><th>Hasil</th><th>Detail</th></tr></thead><tbody id="out"></tbody></table></div>
+<h2 style="font-size:16px;margin-top:22px">Laporan untuk dikirim balik</h2>
+<textarea id="report" readonly></textarea>
+<div class="row"><button id="copy">Salin laporan</button></div>
+</main>
+<script src="config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+(() => {
+'use strict';
+const CFG = window.ACTIVA_CONFIG || {};
+const URL_ = CFG.API_URL;
+const results = [];
+let idToken = null;
+const $ = id => document.getElementById(id);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+$('cfg').textContent = 'API: ' + (URL_ || '(belum diisi di config.js)') + ' | Origin halaman: ' + location.origin;
+
+function add(name, status, detail) {
+  results.push({ name, status, detail });
+  $('out').insertAdjacentHTML('beforeend', `<tr><td>${esc(name)}</td><td class="${status}">${status}</td><td>${esc(typeof detail === 'string' ? detail : JSON.stringify(detail))}</td></tr>`);
+  $('report').value = JSON.stringify({ when: new Date().toISOString(), origin: location.origin, api: URL_, ua: navigator.userAgent,
+    standalone: matchMedia('(display-mode: standalone)').matches, online: navigator.onLine, results }, null, 2);
+}
+async function raw(opts) {
+  const t0 = performance.now();
+  const ctl = new AbortController();
+  const timer = opts.abortMs ? setTimeout(() => ctl.abort(), opts.abortMs) : null;
+  try {
+    const init = { method: opts.method || 'POST', redirect: 'follow', credentials: 'omit', cache: 'no-store', signal: ctl.signal, headers: opts.headers || {} };
+    if (init.method === 'POST') init.body = opts.body;
+    const res = await fetch(opts.url || URL_, init);
+    const text = await res.text();
+    let json = null; try { json = JSON.parse(text); } catch (e) {}
+    return { ok: true, status: res.status, type: res.type, redirected: res.redirected, finalHost: res.url ? new URL(res.url).host : '',
+      contentType: res.headers.get('content-type'), json, textHead: json ? '' : text.slice(0, 120), ms: Math.round(performance.now() - t0) };
+  } catch (e) {
+    return { ok: false, error: e.name + ': ' + e.message, ms: Math.round(performance.now() - t0) };
+  } finally { if (timer) clearTimeout(timer); }
+}
+const post = (action, data, extra) => raw(Object.assign({ body: JSON.stringify({ action, token: idToken, data: data || {} }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } }, extra || {}));
+const uuid = () => (crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-8xxx-xxxxxxxxxxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)));
+
+async function runAnon() {
+  $('runA').disabled = true;
+  if (!URL_ || /PASTE/.test(URL_)) { add('Konfigurasi', 'FAIL', 'API_URL di config.js belum diisi'); return; }
+  add('Konteks aman (HTTPS)', window.isSecureContext ? 'PASS' : 'FAIL', window.isSecureContext ? 'ya' : 'kamera/crypto.randomUUID butuh HTTPS');
+  let r = await raw({ method: 'GET', url: URL_ + '?action=health' });
+  add('GET health lintas-origin', r.ok && r.json && r.json.ok ? 'PASS' : 'FAIL',
+    r.ok ? { status: r.status, redirected: r.redirected, finalHost: r.finalHost, contentType: r.contentType, ms: r.ms, body: r.json || r.textHead } : r.error);
+  const savedTok = idToken; idToken = null;
+  r = await post('me', {});
+  idToken = savedTok;
+  add('POST text/plain tanpa token: redirect diikuti & JSON terbaca', r.ok && r.json && r.json.code === 'AUTH_REQUIRED' ? 'PASS' : 'FAIL',
+    r.ok ? { status: r.status, redirected: r.redirected, finalHost: r.finalHost, code: r.json && r.json.code, head: r.textHead, ms: r.ms } : r.error);
+  r = await raw({ body: JSON.stringify({ action: 'me', token: 'a.b.c', data: {} }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+  add('POST token sampah ditolak', r.ok && r.json && r.json.code === 'AUTH_INVALID' ? 'PASS' : 'FAIL', r.ok ? (r.json || r.textHead) : r.error);
+  r = await raw({ body: JSON.stringify({ action: 'me', data: {} }), headers: { 'Content-Type': 'application/json' } });
+  add('Kontrol: Content-Type JSON (memicu preflight)', r.ok ? 'INFO' : 'PASS',
+    r.ok ? 'Tidak diblokir di browser ini. Tetap pakai text/plain.' : 'Diblokir seperti diduga (' + r.error + '). Ini alasan token dikirim di body text/plain.');
+  r = await raw({ body: JSON.stringify({ action: 'me', data: {} }), headers: { 'Content-Type': 'text/plain', 'Authorization': 'Bearer x' } });
+  add('Kontrol: header Authorization (memicu preflight)', r.ok ? 'INFO' : 'PASS',
+    r.ok ? 'Tidak diblokir di browser ini.' : 'Diblokir seperti diduga (' + r.error + ').');
+  const lat = [];
+  for (let i = 0; i < 5; i++) { const x = await raw({ method: 'GET', url: URL_ + '?action=health' }); if (x.ok) lat.push(x.ms); }
+  lat.sort((a, b) => a - b);
+  add('Latensi health (5x)', lat.length === 5 ? 'INFO' : 'FAIL', lat.length ? { min: lat[0], median: lat[2], max: lat[lat.length - 1] } : 'gagal');
+  $('runA').disabled = false;
+}
+
+async function runAuth() {
+  $('runB').disabled = true;
+  let r = await post('me', {});
+  add('POST dengan ID token di body', r.ok && r.json && r.json.ok ? 'PASS' : 'FAIL',
+    r.ok ? (r.json && r.json.ok ? { email: r.json.data.user.email, role: r.json.data.user.role, ms: r.ms } : (r.json || r.textHead)) : r.error);
+  if (!(r.ok && r.json && r.json.ok)) { $('runB').disabled = false; return; }
+  const pad = 'x'.repeat(1400000);
+  r = await post('diag', { nonce: uuid(), padding: pad }, { abortMs: 60000 });
+  add('Payload ±1,4 MB (setara foto)', r.ok && r.json && r.json.ok && r.json.data.received_chars === pad.length ? 'PASS' : 'FAIL',
+    r.ok ? { ms: r.ms, received: r.json && r.json.data && r.json.data.received_chars } : r.error);
+  const nonce = uuid();
+  r = await post('diag', { nonce, sleep_ms: 4000 }, { abortMs: 1200 });
+  const aborted = !r.ok;
+  add('Simulasi jawaban hilang (abort 1,2 dtk, server tidur 4 dtk)', aborted ? 'PASS' : 'INFO', aborted ? r.error : 'Jawaban datang sebelum abort');
+  await new Promise(res => setTimeout(res, 6000));
+  r = await post('diagStatus', { nonce });
+  const seen = r.ok && r.json && r.json.ok && r.json.data.processed_at;
+  add('Cek status setelah jawaban hilang', seen ? 'PASS' : 'FAIL',
+    seen ? 'Server sudah memproses (' + r.json.data.processed_at + '). Klien harus cek status dulu, bukan kirim ulang buta.' : (r.ok ? r.json : r.error));
+  $('runB').disabled = false;
+}
+
+function initGis() {
+  if (!(window.google && google.accounts && google.accounts.id) || !CFG.GOOGLE_CLIENT_ID) return;
+  google.accounts.id.initialize({ client_id: CFG.GOOGLE_CLIENT_ID, callback: resp => { idToken = resp.credential; $('runB').disabled = false; add('Login Google', 'PASS', 'ID token diterima'); } });
+  google.accounts.id.renderButton($('gbtn'), { theme: 'outline', size: 'medium', text: 'signin_with', locale: 'id' });
+}
+if (window.google && google.accounts && google.accounts.id) initGis(); else window.onGoogleLibraryLoad = initGis;
+$('runA').onclick = runAnon;
+$('runB').onclick = runAuth;
+$('copy').onclick = () => { $('report').select(); try { navigator.clipboard.writeText($('report').value); } catch (e) { document.execCommand('copy'); } };
+})();
+</script>
+</body>
+</html>
