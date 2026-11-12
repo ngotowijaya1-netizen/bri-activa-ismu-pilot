@@ -362,6 +362,56 @@ nav.tabs button:hover:not([aria-current=page]){background:rgba(79,124,182,.13);c
 @media(max-width:360px){.public-shell .features-grid{grid-template-columns:1fr}.public-shell .fake-kpi strong{font-size:17px}.public-shell .landing-hero h1{font-size:30px}}
 @media(prefers-reduced-motion:reduce){.public-shell *{scroll-behavior:auto!important}}
 
+
+/* v0.1.7 · Beranda role-aware, responsive, no unrelated content changes */
+.home-main{max-width:1040px;padding-top:24px}
+.home-welcome{position:relative;overflow:hidden;border-radius:25px;background:linear-gradient(112deg,#082E72 0%,#0753B5 64%,#1686E8 100%);color:#fff;padding:clamp(23px,4vw,38px);box-shadow:0 14px 38px rgba(3,42,93,.15)}
+.home-welcome:before{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-75px;top:-185px;box-shadow:0 0 0 44px rgba(255,255,255,.035),0 0 0 92px rgba(255,255,255,.025);pointer-events:none}
+.home-kicker{position:relative;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;color:#b7e8ff}
+.home-welcome h1{position:relative;font-size:clamp(23px,3.2vw,35px);margin:13px 0 10px;color:#fff;line-height:1.22;overflow-wrap:anywhere}
+.home-welcome p{position:relative;max-width:580px;color:#e4f2ff;font-size:14px;margin-bottom:19px}
+.home-welcome-meta{display:flex;gap:10px;flex-wrap:wrap;position:relative}
+.home-welcome-meta span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.19);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:600}
+.home-section{margin-top:25px}
+.home-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px}
+.home-section-head h2{margin:0;font-size:18px}
+.home-section-note{font-size:12px;color:var(--muted)}
+.home-text-btn{border:0;background:transparent;color:var(--blue);font-weight:700;cursor:pointer;font-size:12px;text-align:right}
+.home-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.home-metric{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:19px;padding:17px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;box-shadow:0 5px 20px rgba(12,55,105,.045)}
+.home-metric-icon,.home-icon{background:linear-gradient(145deg,#d9edff,#b9defe);color:#0657ba;display:grid;place-items:center;border-radius:13px;font-size:20px;font-weight:800;flex-shrink:0}
+.home-metric-icon{width:35px;height:35px}
+.home-metric strong{font-size:29px;line-height:1.05;color:var(--ink);font-weight:800}
+.home-metric small{color:var(--muted);font-size:12px;font-weight:600}
+.home-metric-loading{grid-column:1/-1;color:var(--muted);font-size:13px}
+.home-fineprint{grid-column:1/-1;font-size:11px;color:var(--muted);margin:0 2px}
+.home-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.home-link{width:100%;min-width:0;border:1px solid var(--line);border-radius:19px;background:var(--surface);color:var(--ink);display:flex;align-items:center;gap:13px;text-align:left;padding:16px;cursor:pointer;box-shadow:0 5px 20px rgba(12,55,105,.04);transition:transform .18s,border-color .18s}
+.home-link:hover{transform:translateY(-2px);border-color:#6da9eb}
+.home-icon{width:46px;height:46px}
+.home-link>span:nth-child(2){flex:1;min-width:0}
+.home-link strong{display:block;font-size:14px;line-height:1.35;margin-bottom:5px}
+.home-link small{display:block;font-size:12px;line-height:1.45;color:var(--muted)}
+.home-chevron{color:var(--blue);font-weight:800;font-size:18px}
+.home-role-note{margin-top:22px;padding:18px;display:flex;align-items:flex-start;gap:13px;background:linear-gradient(115deg,rgba(51,132,239,.12),rgba(114,193,248,.08));border:1px solid var(--line);border-radius:20px}
+.home-role-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:#d7ecff;color:#045bbd;font-weight:800;flex-shrink:0}
+.home-role-note strong{font-size:14px}.home-role-note p{font-size:12px;color:var(--muted);margin:5px 0 0}
+@media(max-width:700px){
+ .home-main{padding:16px 13px calc(102px + env(safe-area-inset-bottom,0px))}
+ .home-welcome{border-radius:20px;padding:23px 19px}
+ .home-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .home-metric{border-radius:16px;padding:14px}
+ .home-metric strong{font-size:25px}
+ .home-links{grid-template-columns:1fr;gap:9px}
+ .home-link{border-radius:16px;padding:13px}
+ .home-section-head h2{font-size:16px}
+ nav.tabs{justify-content:flex-start;overflow-x:auto;scrollbar-width:none;padding-left:4px;padding-right:4px}
+ nav.tabs::-webkit-scrollbar{display:none}
+ nav.tabs button{flex:1 0 auto;min-width:70px;max-width:none;font-size:11px;padding:10px 6px 12px}
+}
+@media(max-width:370px){.home-welcome h1{font-size:23px}.home-metric{padding:12px}.home-link small{font-size:11px}nav.tabs button{min-width:66px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.home-link{transition:none}}
+
 </style>
 </head>
 <body>
@@ -972,10 +1022,10 @@ async function processCapture(activityId, f, gpsP) {
 
 // ------------------------------------------------------------ Shell
 function tabsFor(role) {
-  if (LEVEL[role] === 1) return [['today', 'Aktivitas'], ['queue', 'Antrean'], ['history', 'Riwayat'], ['stats', 'Ringkasan'], ['account', 'Akun']];
-  if (role === 'CBM') return [['approvals', 'Persetujuan'], ['history', 'Riwayat'], ['stats', 'Tim'], ['users', 'Pengguna'], ['account', 'Akun']];
-  if (role === 'PINCA') return [['stats', 'Cabang'], ['history', 'Riwayat'], ['users', 'Pengguna'], ['account', 'Akun']];
-  return [['stats', 'Kanwil'], ['history', 'Riwayat'], ['users', 'Pengguna'], ['account', 'Akun']];
+  if (LEVEL[role] === 1) return [['home', 'Beranda'], ['today', 'Aktivitas'], ['queue', 'Antrean'], ['history', 'Riwayat'], ['stats', 'Ringkasan'], ['account', 'Akun']];
+  if (role === 'CBM') return [['home', 'Beranda'], ['approvals', 'Persetujuan'], ['history', 'Riwayat'], ['stats', 'Tim'], ['users', 'Pengguna'], ['account', 'Akun']];
+  if (role === 'PINCA') return [['home', 'Beranda'], ['stats', 'Cabang'], ['history', 'Riwayat'], ['users', 'Pengguna'], ['account', 'Akun']];
+  return [['home', 'Beranda'], ['stats', 'Kanwil'], ['history', 'Riwayat'], ['users', 'Pengguna'], ['account', 'Akun']];
 }
 let publicView = 'landing';
 function landingMockVisual() {
@@ -1062,10 +1112,12 @@ async function renderChrome() {
 let viewBusy = false;
 async function renderView() {
   const m = $('#main'); if (!m) return;
+  if (m.classList && m.classList.toggle) m.classList.toggle('home-main', S.view === 'home');
   viewBusy = true;
   try {
     const v = S.view;
-    if (v === 'today') await viewToday(m);
+    if (v === 'home') await viewHome(m);
+    else if (v === 'today') await viewToday(m);
     else if (v === 'queue') await viewQueue(m);
     else if (v === 'stats') await viewStats(m);
     else if (v === 'approvals') await viewApprovals(m);
@@ -1084,6 +1136,52 @@ const needOnline = (m, title) => {
   m.innerHTML = `<h1>${esc(title)}</h1><div class="empty">Halaman ini membaca data langsung dari server. Sambungkan internet${tokenValid() ? '' : ' dan login ulang'} untuk melihatnya.</div>`;
   return true;
 };
+
+// ------------------------------------------------------------ Beranda setelah login (role-aware)
+async function viewHome(m) {
+  const role = S.profile.role;
+  const maker = isMaker();
+  const scope = role === 'ADMIN' ? 'Kanwil Medan' : (S.profile.branch_name || S.profile.branch_code || 'cabang');
+  const firstName = (S.profile.name || 'Insan BRILIAN').trim().split(/\s+/)[0];
+  const links = role === 'ADMIN'
+    ? [['stats','Produktivitas Kanwil','Ringkasan aktivitas seluruh cabang','▥'],['users','Manajemen Pengguna','Kelola akun lintas cabang','♙'],['history','Riwayat & Evidence','Buka kembali aktivitas yang telah diputuskan','▤']]
+    : role === 'PINCA'
+      ? [['stats','Produktivitas Cabang','Pantau aktivitas di cabang Anda','▥'],['users','Pengguna CBM','Kelola CBM cabang','♙'],['history','Riwayat & Evidence','Tinjau aktivitas cabang','▤']]
+      : role === 'CBM'
+        ? [['approvals','Persetujuan Aktivitas','Review kegiatan yang dikirim RM/SO','✓'],['stats','Produktivitas Tim','Pantau capaian dan status tim','▥'],['history','Riwayat & Evidence','Buka foto dan lokasi kegiatan terdahulu','⌖'],['users','Pengguna Tim','Kelola akun RM/SO di cabang','♙']]
+        : [['today','Aktivitas Saya','Buat rencana dan catat hasil kegiatan','▥'],['queue','Antrean Sinkronisasi','Lihat data yang belum terkirim','⇪'],['history','Riwayat Saya','Telusuri keputusan dan evidence','▤'],['stats','Ringkasan Saya','Pantau aktivitas yang tercatat','◫']];
+  const cards = links.map(([dest,title,description,icon]) => `<button class="home-link" data-act="nav" data-v="${dest}"><span class="home-icon" aria-hidden="true">${icon}</span><span><strong>${title}</strong><small>${description}</small></span><span class="home-chevron" aria-hidden="true">→</span></button>`).join('');
+  m.classList.add('home-main');
+  m.innerHTML = `<div class="home-welcome"><span class="home-kicker">BRI ACTIVA · ${esc(role)}</span>
+    <h1>Selamat datang, ${esc(firstName)} <span aria-hidden="true">👋</span></h1>
+    <p>Kelola aktivitas dan pantau produktivitas ${maker?'Anda': 'tim'} dengan lebih mudah, transparan, dan terstruktur.</p>
+    <div class="home-welcome-meta"><span>⌖ ${esc(scope)}</span><span>◉ ${navigator.onLine?'Terhubung':'Mode offline'}</span></div></div>
+    <section class="home-section"><div class="home-section-head"><h2>Ringkasan produktivitas</h2><button class="home-text-btn" data-act="nav" data-v="stats">Lihat detail →</button></div>
+    <div id="homeMetrics" class="home-metrics"><div class="home-metric home-metric-loading">Memuat data server…</div></div></section>
+    <section class="home-section"><div class="home-section-head"><h2>Fitur utama</h2><span class="home-section-note">Akses sesuai peran</span></div>
+    <div class="home-links">${cards}</div></section>
+    <section class="home-role-note"><span class="home-role-mark">✓</span><div><strong>Alur kerja berbasis peran</strong><p>${role === 'ADMIN' ? 'Akses administrasi global. Approval aktivitas tetap menjadi kewenangan CBM.' : role === 'PINCA' ? 'Pantau seluruh cabang dan kelola CBM sesuai kewenangan.' : role === 'CBM' ? 'Persetujuan aktivitas dilakukan setelah meninjau bukti RM/SO.' : 'Rencana, bukti kunjungan, dan hasil kegiatan tersimpan lebih dulu di perangkat saat offline.'}</p></div></section>`;
+  const box = $('#homeMetrics');
+  if (!navigator.onLine || !tokenValid()) {
+    box.innerHTML = '<div class="home-metric home-metric-loading">Ringkasan server hanya tersedia saat online dan sesi login aktif. Gunakan menu fitur untuk melanjutkan.</div>';
+    return;
+  }
+  try {
+    const d = await api('dashboard');
+    if (!$('#homeMetrics') || S.view !== 'home') return;
+    const rows = Array.isArray(d.rows) ? d.rows : [];
+    const sum = name => rows.reduce((n,r) => n + (Number(r[name]) || 0), 0);
+    const metrics = [
+      ['Total aktivitas',rows.reduce((n,r)=>n+(Number(r.total)||0),0),'▥'],
+      ['Disetujui',sum('APPROVED'),'✓'],
+      ['Menunggu',sum('SUBMITTED'),'◷'],
+      ['Perlu revisi',sum('REVISION'),'↺']
+    ];
+    $('#homeMetrics').innerHTML = metrics.map(([label,n,icon])=>`<div class="home-metric"><span class="home-metric-icon" aria-hidden="true">${icon}</span><strong>${n}</strong><small>${label}</small></div>`).join('') + `<p class="home-fineprint">Periode ${esc(d.period || 'berjalan')} · hanya aktivitas yang sudah diterima server.</p>`;
+  } catch(e) {
+    if ($('#homeMetrics') && S.view === 'home') $('#homeMetrics').innerHTML = `<div class="home-metric home-metric-loading">Ringkasan belum dapat dimuat. ${esc(e.message)}</div>`;
+  }
+}
 
 // ------------------------------------------------------------ RM/SO: Aktivitas
 async function viewToday(m) {

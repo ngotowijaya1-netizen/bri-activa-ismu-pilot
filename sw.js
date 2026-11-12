@@ -1,6 +1,6 @@
 // Service worker: cache app shell agar aplikasi bisa dibuka ulang saat offline.
 // Tidak pernah meng-cache request ke API (script.google.com) atau login (accounts.google.com).
-const VERSION = 'activa-shell-0.1.6-responsive';
+const VERSION = 'activa-shell-0.1.7-role-home';
 const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
