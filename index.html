@@ -412,6 +412,60 @@ nav.tabs button:hover:not([aria-current=page]){background:rgba(79,124,182,.13);c
 @media(max-width:370px){.home-welcome h1{font-size:23px}.home-metric{padding:12px}.home-link small{font-size:11px}nav.tabs button{min-width:66px;font-size:10px}}
 @media(prefers-reduced-motion:reduce){.home-link{transition:none}}
 
+
+/* v0.1.8 — cohesive light-blue private workspace. All enforcement stays on the backend. */
+:root{--navy:#0758af;--blue:#0867cf;--sky:#6bbbef;--ink:#10294e;--muted:#58718f;
+ --line:#d8e6f7;--bg:#ecf4ff;--surface:#fff;--soft:#e9f3ff;--surface-raised:#f1f7ff;
+ --s-plan:#3b6ea8;--s-sub:#075bc1;--s-ok:#17724b;--s-rev:#8c570a;--s-cancel:#607389;
+ --warn:#87520c;--bad:#b42318;--onfill:#fff;--shadow:0 10px 28px rgba(24,78,149,.06);color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--navy:#0758af;--blue:#0867cf;--sky:#6bbbef;--ink:#10294e;--muted:#58718f;
+ --line:#d8e6f7;--bg:#ecf4ff;--surface:#fff;--soft:#e9f3ff;--surface-raised:#f1f7ff;
+ --s-plan:#3b6ea8;--s-sub:#075bc1;--s-ok:#17724b;--s-rev:#8c570a;--s-cancel:#607389;
+ --warn:#87520c;--bad:#b42318;--onfill:#fff;--shadow:0 10px 28px rgba(24,78,149,.06);color-scheme:light}}
+body{background:linear-gradient(180deg,#edf6ff 0%,#eaf2ff 65%,#f3f8ff 100%);color:var(--ink)}
+.top{background:linear-gradient(108deg,#07448f 0%,#0763bf 67%,#0886de 100%);box-shadow:0 5px 24px rgba(1,63,139,.13)}
+.top .pill{color:#fff}.syncbtn{color:#0754ad}
+main{padding-bottom:calc(158px + env(safe-area-inset-bottom,0px));min-height:calc(100dvh - 74px)}
+h1,h2{color:#10294e}.sub{color:#617a97}
+.btn{background:#075dc3;color:#fff;border-radius:15px}.btn:hover:not(:disabled){background:#0872dc}
+.btn.ghost{background:#eff6ff;color:#17436f;border-color:#bfd6f0}.btn.ghost:hover:not(:disabled){background:#e4f1ff}
+.btn.danger{background:#fff2f2;color:#a12222;border-color:#eeaeb2}.btn.ok{background:#147d56;color:#fff}
+.link,.home-text-btn{color:#065ec2}
+.seg{background:#e5f1ff;border-color:#d3e4fa}.seg button[aria-pressed=true]{background:#fff;color:#0758b2;box-shadow:0 2px 9px rgba(7,75,143,.10)}
+.act,.panel,.op,.tbl,.home-metric,.home-link{background:#fff;border-color:#d8e6f7;box-shadow:var(--shadow)}
+.act:hover,.home-link:hover{background:#f7fbff;border-color:#9cc8f4}
+.empty{background:#f7fbff;border-color:#bcd3ec;color:#617a97}
+.field>span{color:#17365f}.field input,.field select,.field textarea{background:#f8fbff;border-color:#cbdcf0;color:#122f53}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#278be4;box-shadow:0 0 0 3px rgba(48,148,240,.14)}
+.sheet{background:#edf5ff}.sheet .sh{background:#fff;border-bottom-color:#d8e6f7}
+.dialog{background:rgba(9,35,73,.57)}.dlg{background:#fff;border-color:#d3e1f1;box-shadow:0 20px 70px rgba(17,54,101,.22)}
+.toast{background:#1c4a84;color:#fff;border-color:#4b87c5}
+th{background:#e8f2ff;color:#1d4775}th,td{border-bottom-color:#e1eaf5}tr:hover td,.users .u:hover{background:#f6faff}.users .u{border-bottom-color:#e1eaf5}
+nav.tabs{bottom:calc(14px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.98);border:1px solid #c8dcf2;
+ box-shadow:0 12px 34px rgba(18,74,145,.16);border-radius:22px;max-width:760px}
+nav.tabs button{color:#526e90;white-space:nowrap}nav.tabs button[aria-current=page]{background:#e1f0ff;color:#045cb8;box-shadow:inset 0 0 0 1px #c5e3ff}
+nav.tabs button:hover:not([aria-current=page]){background:#f0f7ff;color:#145ba3}
+.home-welcome{background:linear-gradient(112deg,#08478f,#0966c7 67%,#1697e5);box-shadow:0 15px 39px rgba(4,70,147,.14)}
+.home-section-head h2{color:#133459}.home-metric strong{color:#112d55}.home-icon,.home-metric-icon{background:linear-gradient(145deg,#e0f2ff,#c9e6ff);color:#0756b3}
+.home-link{color:#12335b}.home-link small{color:#617a97}.home-role-note{background:linear-gradient(120deg,#dcecff,#e9f5ff);border-color:#cfe3fa}
+.home-role-note p{color:#4f6b8d}.home-role-mark{background:#fff;color:#095cbe}
+.public-shell .public-orbit{position:relative;display:grid;place-items:center;min-height:300px;isolation:isolate}
+.public-shell .orbit-halo{position:absolute;width:min(88%,360px);aspect-ratio:1;border:1px solid rgba(126,234,255,.4);border-radius:50%;box-shadow:0 0 0 32px rgba(36,172,246,.055),0 0 0 70px rgba(36,172,246,.035)}
+.public-shell .orbit-main{z-index:1;min-height:190px;width:min(78%,310px);background:linear-gradient(155deg,rgba(12,91,182,.94),rgba(5,43,111,.94));border:1px solid rgba(160,225,255,.56);border-radius:30px;box-shadow:0 26px 58px rgba(0,25,77,.38);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:25px}
+.public-shell .orbit-main strong{font-size:18px;letter-spacing:-.025em;color:#fff}.public-shell .orbit-main small{font-size:12px;color:#cceaff}
+.public-shell .orbit-icon{width:64px;height:64px;display:grid;place-items:center;border-radius:21px;background:linear-gradient(145deg,#15aeef,#2678e8);box-shadow:0 9px 28px rgba(1,35,107,.25);font-size:31px}
+.public-shell .orbit-chip{position:absolute;z-index:2;width:58px;height:58px;display:grid;place-items:center;border-radius:19px;border:1px solid rgba(206,247,255,.65);background:linear-gradient(150deg,#42c5ff,#1372d5);box-shadow:0 15px 38px rgba(0,35,106,.32);font-size:27px;color:#fff}
+.public-shell .chip-left{left:3%;top:10%}.public-shell .chip-right{right:4%;top:20%}.public-shell .chip-bottom{right:14%;bottom:1%}
+@media(max-width:700px){
+ main,.home-main{padding-left:16px;padding-right:16px;padding-bottom:calc(158px + env(safe-area-inset-bottom,0px))}
+ nav.tabs{width:calc(100% - 24px);max-width:520px;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:50%;right:auto;transform:translateX(-50%);gap:2px;padding:4px;overflow-x:auto;overscroll-behavior-x:contain}
+ nav.tabs button{min-width:60px;min-height:45px;flex:1 1 0;padding:9px 2px;font-size:clamp(9px,2.55vw,11px)}
+ .home-welcome{padding:24px 20px;border-radius:24px}.home-section{margin-top:24px}
+ .home-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.home-links{grid-template-columns:1fr}
+ .public-shell .public-orbit{min-height:250px}.public-shell .orbit-main{min-height:170px}.public-shell .orbit-halo{width:70%}
+ .public-shell .orbit-chip{width:48px;height:48px;font-size:24px}.public-shell .chip-left{left:2%}.public-shell .chip-right{right:2%}
+}
+@media(max-width:360px){nav.tabs button{font-size:9px;min-width:53px}.home-metric{padding:12px}.home-welcome h1{font-size:22px}}
 </style>
 </head>
 <body>
@@ -1029,47 +1083,46 @@ function tabsFor(role) {
 }
 let publicView = 'landing';
 function landingMockVisual() {
-  return `<div class="hero-visual" aria-label="Ilustrasi dashboard aktivitas, hanya contoh visual">
-    <div class="floating-token one" aria-hidden="true">◎</div>
-    <div class="fake-window"><div class="fake-title">Produktivitas Tim · Preview</div>
-      <div class="fake-kpis"><div class="fake-kpi"><span>Total Aktivitas</span><strong>128</strong></div><div class="fake-kpi"><span>Disetujui</span><strong>96</strong></div><div class="fake-kpi"><span>Perlu Revisi</span><strong>8</strong></div></div>
-      <div class="fake-chart" aria-hidden="true"><span style="--bar:30%"></span><span style="--bar:47%"></span><span style="--bar:39%"></span><span style="--bar:65%"></span><span style="--bar:58%"></span><span style="--bar:76%"></span><span style="--bar:90%"></span></div>
-      <div class="fake-rows"><span>✓ Approval</span><span>⌖ GPS Evidence</span><span>▤ Riwayat</span></div>
-    </div><div class="floating-token two" aria-hidden="true">✓</div>
+  // Public visual is purely illustrative: no operational data, role structure or GPS/evidence information.
+  return `<div class="hero-visual" aria-label="Ilustrasi abstrak kolaborasi digital">
+    <div class="public-orbit" aria-hidden="true"><div class="orbit-halo"></div>
+      <div class="orbit-main"><span class="orbit-icon">✓</span><strong>Kolaborasi lebih mudah</strong><small>Terhubung dalam satu platform</small></div>
+      <span class="orbit-chip chip-left" aria-hidden="true">◫</span><span class="orbit-chip chip-right" aria-hidden="true">↗</span>
+      <span class="orbit-chip chip-bottom" aria-hidden="true">✦</span>
+    </div>
   </div>`;
 }
 function renderLanding() {
+  // Do not include internal RBAC, evidence workflows, geolocation metadata, audit or sample production metrics here.
   $('#app').innerHTML = `<div class="public-shell"><div class="hero-gradient"><div class="public-wrap">
     <header class="public-nav"><div class="public-logo"><span class="logo-square" aria-hidden="true">A</span><span>BRI <span class="aqua">ACTIVA</span></span></div>
-      <div class="navlinks"><a href="#fitur">Fitur</a><a href="#alur">Alur & Peran</a><a href="#tentang">Tentang</a></div>
+      <div class="navlinks"><a href="#fitur">Keunggulan</a><a href="#tentang">Tentang</a></div>
       <button type="button" class="public-action" data-act="showLogin">Masuk →</button></header>
-    <section class="landing-hero"><div><span class="eyebrow">Platform Monitoring Produktivitas</span>
-      <h1>Pantau Aktivitas RM & SO <em>Secara Terintegrasi.</em></h1>
-      <p>Kelola rencana kerja, evidence, persetujuan CBM, riwayat aktivitas, dan monitoring cabang dalam satu platform yang transparan.</p>
-      <div class="cta-group"><button class="public-action" data-act="showLogin">Masuk ke BRI ACTIVA →</button><a class="public-action secondary" href="#fitur" style="text-decoration:none">Pelajari Fitur</a></div></div>
+    <section class="landing-hero"><div><span class="eyebrow">BRI ACTIVA · Platform Kolaborasi Digital</span>
+      <h1>Aktivitas lebih terarah. <em>Kolaborasi lebih mudah.</em></h1>
+      <p>Ruang kerja digital untuk mendukung koordinasi aktivitas, kolaborasi tim, dan pemantauan pekerjaan yang lebih tertata.</p>
+      <div class="cta-group"><button class="public-action" data-act="showLogin">Masuk ke BRI ACTIVA →</button><a class="public-action secondary" href="#fitur" style="text-decoration:none">Kenali Platform</a></div></div>
       ${landingMockVisual()}</section></div></div>
-    <section class="public-content" id="fitur"><div class="public-wrap"><div class="section-heading"><h2>Fitur Utama BRI ACTIVA</h2><p>Satu sistem untuk mendukung produktivitas lapangan dan pengawasan yang akuntabel.</p></div>
+    <section class="public-content" id="fitur"><div class="public-wrap"><div class="section-heading"><h2>Ruang kerja yang lebih terintegrasi</h2><p>Didesain untuk membantu tim bekerja dengan nyaman, efisien, dan terstruktur.</p></div>
       <div class="features-grid">
-        <article class="feature-card"><div class="feature-icon" aria-hidden="true">✓</div><h3>Persetujuan Aktivitas</h3><p>CBM meninjau dan menyetujui evidence yang dikirim oleh RM/SO.</p></article>
-        <article class="feature-card"><div class="feature-icon" aria-hidden="true">▥</div><h3>Produktivitas Tim</h3><p>Pantau aktivitas harian dan ringkasan kinerja sesuai hak akses.</p></article>
-        <article class="feature-card"><div class="feature-icon" aria-hidden="true">⌖</div><h3>GPS & Google Maps</h3><p>Buka lokasi evidence yang memiliki koordinat valid di Google Maps.</p></article>
-        <article class="feature-card"><div class="feature-icon" aria-hidden="true">▤</div><h3>Riwayat & Audit</h3><p>Telusuri aktivitas approved, detail bukti, dan keputusan persetujuan.</p></article>
+        <article class="feature-card"><div class="feature-icon" aria-hidden="true">◫</div><h3>Aktivitas Terorganisasi</h3><p>Susun pekerjaan dan pantau progres melalui satu ruang kerja.</p></article>
+        <article class="feature-card"><div class="feature-icon" aria-hidden="true">✦</div><h3>Kolaborasi Tim</h3><p>Dukung koordinasi yang lebih jelas dalam kegiatan sehari-hari.</p></article>
+        <article class="feature-card"><div class="feature-icon" aria-hidden="true">↗</div><h3>Informasi Ringkas</h3><p>Temukan informasi yang relevan dengan lebih mudah.</p></article>
+        <article class="feature-card"><div class="feature-icon" aria-hidden="true">◇</div><h3>Akses Terbatas</h3><p>Platform hanya tersedia bagi pengguna yang telah diotorisasi.</p></article>
       </div>
-      <section class="roles-section" id="alur"><div><h2>Alur Kerja Berbasis Peran</h2><p>Kewenangan berbeda untuk setiap tingkatan organisasi.</p></div>
-        <div class="roles-flow"><div class="role-chip"><span>◈</span>ADMIN</div><div class="role-chip"><span>♙</span>PINCA</div><div class="role-chip"><span>✓</span>CBM</div><div class="role-chip"><span>▥</span>RM / SO</div></div></section>
-      <section class="bottom-cta" id="tentang"><div><h2>Mulai dengan BRI ACTIVA</h2><p>Gunakan akun Google yang telah didaftarkan oleh administrator.</p></div><button type="button" class="public-action" data-act="showLogin">Masuk Sekarang →</button></section>
-    </div></section><footer class="public-footer">BRI ACTIVA · Prototipe internal terbatas · © 2026</footer></div>`;
+      <section class="bottom-cta" id="tentang"><div><h2>Mulai dengan BRI ACTIVA</h2><p>Gunakan akun yang sudah mendapatkan akses.</p></div><button type="button" class="public-action" data-act="showLogin">Masuk Sekarang →</button></section>
+    </div></section><footer class="public-footer">BRI ACTIVA · Platform dengan akses terbatas · © 2026</footer></div>`;
 }
 function renderLogin(msg) {
   if (publicView === 'landing' && !msg) return renderLanding();
   publicView = 'login';
   $('#app').innerHTML = `<div class="public-shell"><div class="login-page">
     <section class="login-hero"><div class="public-logo"><span class="logo-square" aria-hidden="true">A</span>BRI <span class="aqua">ACTIVA</span></div>
-      <div class="login-hero-main"><span class="eyebrow">Produktivitas · Evidence · Approval</span>
+      <div class="login-hero-main"><span class="eyebrow">Kolaborasi · Aktivitas · Produktivitas</span>
         <h1>Selamat Datang di <span>BRI ACTIVA</span></h1>
-        <p>Platform kolaborasi dan monitoring aktivitas RM & SO yang terintegrasi, transparan, dan efisien.</p>
+        <p>Platform kolaborasi digital yang terintegrasi, sederhana, dan efisien.</p>
         <div class="login-visual-chips" aria-hidden="true"><span>▥</span><span>✓</span><span>⌖</span></div>
-        <div class="login-symbols"><div><b>▥</b> Produktivitas</div><div><b>✓</b> Persetujuan</div><div><b>⌖</b> GPS & Riwayat</div></div>
+        <div class="login-symbols"><div><b>◫</b> Aktivitas</div><div><b>✦</b> Kolaborasi</div><div><b>↗</b> Produktivitas</div></div>
       </div><div class="login-hero-footer">BRI ACTIVA · Akses prototipe terbatas</div></section>
     <section class="login-side"><div class="auth-card"><button type="button" class="auth-back" data-act="showLanding">← Kembali ke Beranda</button>
       <div class="auth-kicker">Selamat datang</div><h2>Masuk ke BRI ACTIVA</h2>
@@ -1078,8 +1131,8 @@ function renderLogin(msg) {
       <div class="google-login-wrap"><div style="font-weight:800;font-size:14px;color:#244875">Login Aman dengan Google</div>
       <div id="gbtn" class="gbtn"></div></div>
       <div class="auth-help"><button class="link" data-act="recoveryHelp">Tidak bisa masuk?</button></div>
-      <div class="auth-info">ⓘ Hanya akun yang sudah terdaftar di BRI ACTIVA dan Google OAuth test users yang dapat mengakses pilot.</div>
-      <div class="auth-security">🔒 Prototipe internal · Jangan menggunakan data nasabah nyata</div>
+      <div class="auth-info">ⓘ Akses hanya diberikan kepada akun yang telah diotorisasi.</div>
+      <div class="auth-security">🔒 Akses terbatas · Gunakan sesuai ketentuan organisasi</div>
     </div></section></div></div>`;
   mountGisButton($('#gbtn'));
 }
@@ -1160,7 +1213,7 @@ async function viewHome(m) {
     <div id="homeMetrics" class="home-metrics"><div class="home-metric home-metric-loading">Memuat data server…</div></div></section>
     <section class="home-section"><div class="home-section-head"><h2>Fitur utama</h2><span class="home-section-note">Akses sesuai peran</span></div>
     <div class="home-links">${cards}</div></section>
-    <section class="home-role-note"><span class="home-role-mark">✓</span><div><strong>Alur kerja berbasis peran</strong><p>${role === 'ADMIN' ? 'Akses administrasi global. Approval aktivitas tetap menjadi kewenangan CBM.' : role === 'PINCA' ? 'Pantau seluruh cabang dan kelola CBM sesuai kewenangan.' : role === 'CBM' ? 'Persetujuan aktivitas dilakukan setelah meninjau bukti RM/SO.' : 'Rencana, bukti kunjungan, dan hasil kegiatan tersimpan lebih dulu di perangkat saat offline.'}</p></div></section>`;
+    <section class="home-role-note"><span class="home-role-mark">✓</span><div><strong>Informasi akses Anda</strong><p>${role === 'ADMIN' ? 'Akses administrasi global. Approval aktivitas tetap menjadi kewenangan CBM.' : role === 'PINCA' ? 'Pantau seluruh cabang dan kelola CBM sesuai kewenangan.' : role === 'CBM' ? 'Persetujuan aktivitas dilakukan setelah meninjau bukti RM/SO.' : 'Rencana, bukti kunjungan, dan hasil kegiatan tersimpan lebih dulu di perangkat saat offline.'}</p></div></section>`;
   const box = $('#homeMetrics');
   if (!navigator.onLine || !tokenValid()) {
     box.innerHTML = '<div class="home-metric home-metric-loading">Ringkasan server hanya tersedia saat online dan sesi login aktif. Gunakan menu fitur untuk melanjutkan.</div>';
