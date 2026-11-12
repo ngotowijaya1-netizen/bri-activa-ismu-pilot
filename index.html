@@ -1,0 +1,1525 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#103D72">
+<title>BRI ACTIVA</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#00529C;--blue:#0857C3;--sky:#71C5EB;
+  --ink:#14253D;--muted:#5B6B80;--line:#D7DFE9;--bg:#F2F5F9;--surface:#FFFFFF;
+  --s-plan:#3B6EA8;--s-sub:#0857C3;--s-ok:#1F7A4D;--s-rev:#9A5B00;--s-cancel:#6B7787;
+  --warn:#9A5B00;--bad:#B42318;--onfill:#FFFFFF;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --navy:#0B3F78;--blue:#6BA6F5;--sky:#71C5EB;
+    --ink:#E6EDF6;--muted:#9AABC0;--line:#2A3B57;--bg:#0D1625;--surface:#152238;
+    --s-plan:#3B6EA8;--s-sub:#2F6FD6;--s-ok:#24885A;--s-rev:#A86A0B;--s-cancel:#5C6878;
+    --warn:#F0B44C;--bad:#F2836F;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.top{position:sticky;top:0;z-index:5;background:var(--navy);color:#fff;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;align-items:center;gap:12px}
+.brand{font-weight:700;font-size:17px;line-height:1.2}
+.brand small{display:block;font-weight:500;font-size:12px;opacity:.85}
+.net{margin-left:auto;display:flex;align-items:center;gap:8px}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1.5px solid rgba(255,255,255,.6)}
+.pill.off{border-style:dashed}
+.syncbtn{background:#fff;color:#00529C;border:0;border-radius:999px;padding:6px 8px 6px 12px;font-weight:600;font-size:13px;
+  display:flex;gap:8px;align-items:center;cursor:pointer}
+.syncbtn:disabled{opacity:.7;cursor:progress}
+.syncbtn .n{min-width:22px;padding:1px 6px;border-radius:999px;border:1.5px dashed #9A5B00;color:#9A5B00;text-align:center}
+.syncbtn .n.zero{border:1.5px solid #1F7A4D;color:#1F7A4D}
+
+main{max-width:680px;margin:0 auto;padding:16px 16px calc(92px + env(safe-area-inset-bottom,0px))}
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:5;background:var(--surface);border-top:1px solid var(--line);
+  display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs button{flex:1;max-width:170px;background:none;border:0;border-top:3px solid transparent;padding:10px 4px 12px;
+  font-weight:600;font-size:12.5px;color:var(--muted);cursor:pointer}
+nav.tabs button[aria-current=page]{color:var(--blue);border-top-color:var(--blue)}
+
+h1{font-size:21px;line-height:1.25;margin:4px 0 12px;font-weight:700}
+h2{font-size:15.5px;margin:22px 0 8px;font-weight:700}
+h2.day{font-size:13.5px;color:var(--muted);font-weight:600;margin:18px 0 8px}
+p{margin:0 0 10px}
+.sub{color:var(--muted);font-size:13.5px}
+.small{font-size:12.5px}
+.head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+.btn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 16px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}
+.btn.ok{background:var(--s-ok)}
+.btn.wide{width:100%;padding:13px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{background:none;border:0;color:var(--blue);font-weight:600;padding:6px 0;cursor:pointer}
+.link.danger{color:var(--bad)}
+
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:4px}
+.seg button{background:transparent;border:0;padding:7px 14px;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--blue)}
+
+.act{display:grid;grid-template-columns:6px 1fr;width:100%;text-align:left;padding:0;margin:0 0 10px;cursor:pointer;
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.act .rail{background:var(--c)}
+.act .body{display:block;padding:12px 14px}
+.act .t{display:block;font-weight:600;font-size:15.5px}
+.act .sub{display:block}
+.lanes{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12.5px}
+.lane{display:inline-flex;align-items:center;gap:6px}
+.lane b{font-weight:500;color:var(--muted)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;border:1.5px solid var(--c);color:var(--c);font-weight:600;font-size:12.5px;line-height:1.5}
+.tag.solid{background:var(--c);color:var(--onfill)}
+.tag.local{border-style:dashed;background:transparent}
+
+.banner{border-radius:8px;padding:10px 14px;margin:12px 16px 0;font-size:13.5px;border:1.5px dashed var(--warn);color:var(--ink);
+  background:var(--surface);display:flex;gap:10px;align-items:center;justify-content:space-between;max-width:648px}
+@media (min-width:681px){.banner{margin:12px auto 0}}
+.banner.err{border:1.5px solid var(--bad)}
+.empty{padding:22px 16px;border:1.5px dashed var(--line);border-radius:10px;color:var(--muted);text-align:center}
+
+.form{display:grid;gap:14px}
+.field{display:grid;gap:6px}
+.field>span{font-weight:600;font-size:13.5px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--surface)}
+.field textarea{resize:vertical}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;margin:10px 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.thumb{position:relative;border-radius:8px;overflow:hidden;background:var(--line);aspect-ratio:1}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .tag{position:absolute;left:6px;bottom:6px;font-size:11px;background:var(--surface)}
+.thumb .tag.solid{background:var(--c)}
+.evrow{display:grid;grid-template-columns:96px 1fr;gap:12px;margin:0 0 12px}
+.evrow .thumb{aspect-ratio:1}
+.flag{display:inline-block;margin:2px 6px 0 0;font-size:12px;color:var(--warn);border:1.5px dashed var(--warn);border-radius:6px;padding:0 6px}
+
+.op{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 10px}
+.op .h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.op .err{color:var(--bad);font-size:13px;margin-top:6px}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left;white-space:normal;min-width:130px}
+th{font-weight:600;color:var(--muted);font-size:12.5px}
+tr:last-child td{border-bottom:0}
+.users .u{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.users .u:last-child{border-bottom:0}
+.thumb-zoom{padding:0;border:0;background:transparent;cursor:zoom-in;display:block;max-width:100%}
+.thumb-zoom img{display:block;max-width:100%;height:auto}
+
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto}
+.sheet .sh{position:sticky;top:0;background:var(--surface);border-bottom:1px solid var(--line);
+  padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;align-items:center;gap:12px}
+.sheet .sh h2{margin:0;font-size:16px;flex:1}
+.sheet .sb{max-width:680px;margin:0 auto;padding:16px 16px calc(32px + env(safe-area-inset-bottom,0px))}
+.dialog{position:fixed;inset:0;z-index:30;background:rgba(10,20,35,.5);display:grid;place-items:center;padding:16px}
+.dialog[hidden],.sheet[hidden]{display:none}
+.dlg{background:var(--surface);border-radius:12px;padding:18px;max-width:420px;width:100%}
+.dlg h2{margin:0 0 8px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:40;
+  background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:14px;max-width:calc(100% - 32px);
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.toast.err{background:var(--bad);color:#fff}
+
+.login{max-width:420px;margin:0 auto;padding:calc(56px + env(safe-area-inset-top,0px)) 24px 32px;text-align:center}
+.login .mark{width:64px;height:64px;margin:0 auto 18px;border-radius:16px;background:var(--navy);position:relative}
+.login .mark::after{content:"";position:absolute;inset:14px;border:3px dashed var(--sky);border-radius:50%}
+.login h1{font-size:26px;margin-bottom:6px}
+.gbtn{display:flex;justify-content:center;min-height:48px;align-items:center;margin:24px 0 16px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* BRI ACTIVA v0.1.5 — Inter / Bubbly Professional Design System
+   Pure presentation changes. Existing selectors, handlers and role checks remain intact. */
+:root {
+  --navy:#103D72; --blue:#65A7FF; --sky:#91CAFF;
+  --ink:#EDF4FF; --muted:#9DB2D0; --line:#2B4263;
+  --bg:#0B1527; --surface:#172741;
+  --s-plan:#90B8E8; --s-sub:#73B2FF; --s-ok:#47C69D;
+  --s-rev:#F8BF77; --s-cancel:#A7B4C7;
+  --warn:#F8BF77; --bad:#FF9B99; --onfill:#08182C;
+  --soft:#1C3151; --surface-raised:#203657; --shadow:0 12px 34px rgba(0,0,0,.14);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark) {
+  :root {
+    --navy:#103D72; --blue:#65A7FF; --sky:#91CAFF;
+    --ink:#EDF4FF; --muted:#9DB2D0; --line:#2B4263;
+    --bg:#0B1527; --surface:#172741;
+    --s-plan:#90B8E8; --s-sub:#73B2FF; --s-ok:#47C69D;
+    --s-rev:#F8BF77; --s-cancel:#A7B4C7;
+    --warn:#F8BF77; --bad:#FF9B99; --onfill:#08182C;
+    --soft:#1C3151; --surface-raised:#203657; --shadow:0 12px 34px rgba(0,0,0,.14);
+    color-scheme:dark;
+  }
+}
+html {scroll-behavior:smooth}
+body {font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;letter-spacing:-.012em;
+  background:radial-gradient(ellipse 75% 50% at 92% -10%,rgba(53,113,195,.17),transparent 75%),var(--bg)}
+button,input,select,textarea{font-family:inherit}
+.top {background:linear-gradient(112deg,#113A6C 0%,#104D8E 70%,#1A568E 100%);
+  padding:calc(15px + env(safe-area-inset-top,0px)) clamp(16px,3vw,36px) 15px;
+  box-shadow:0 4px 22px rgba(4,17,37,.17);border-bottom:1px solid rgba(157,195,242,.13)}
+.brand{font-weight:800;font-size:18px;letter-spacing:-.035em}
+.brand small{font-size:12px;font-weight:500;letter-spacing:-.008em;opacity:.9;margin-top:3px}
+.pill{border:1px solid rgba(191,224,255,.46);padding:6px 13px;background:rgba(9,39,80,.26);border-radius:100px}
+.syncbtn{padding:8px 10px 8px 14px;border-radius:100px;box-shadow:0 3px 11px rgba(0,0,0,.12)}
+.syncbtn .n{border-radius:100px}
+main{max-width:930px;margin:0 auto;padding:clamp(20px,3vw,32px) clamp(18px,3vw,32px) calc(112px + env(safe-area-inset-bottom,0px))}
+h1{font-weight:800;font-size:clamp(23px,2.25vw,28px);line-height:1.23;letter-spacing:-.04em;margin:4px 0 14px}
+h2{font-weight:750;font-size:16px;letter-spacing:-.025em;margin:25px 0 11px}
+h2.day{color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.07em}
+.sub{color:var(--muted);line-height:1.55}
+.head{align-items:center;gap:14px;margin-bottom:7px}
+.btn{border-radius:14px;padding:11px 18px;background:#5798F2;color:#071C37;font-weight:750;
+  box-shadow:0 5px 14px rgba(33,107,210,.15);transition:background .18s,transform .18s,box-shadow .18s}
+.btn:hover:not(:disabled){background:#7AB3FF;box-shadow:0 7px 17px rgba(33,107,210,.24);transform:translateY(-1px)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn.ghost{background:var(--soft);border:1px solid #355378;color:var(--ink);box-shadow:none}
+.btn.ghost:hover:not(:disabled){background:var(--surface-raised)}
+.btn.ok{background:#42BB91;color:#082619}
+.btn.danger{color:var(--bad);border-color:#AD5D61;background:rgba(188,72,81,.07);box-shadow:none}
+.btn.wide{border-radius:16px;min-height:48px}
+.link{color:#90C1FF;text-decoration:none}
+.link:hover{text-decoration:underline}
+.seg{background:#101F35;border:1px solid var(--line);border-radius:14px;padding:4px;gap:2px;overflow:visible}
+.seg button{border-radius:10px;padding:8px 15px;font-weight:650;color:var(--muted)}
+.seg button[aria-pressed=true]{background:#263E62;color:#B9D8FF;box-shadow:0 2px 8px rgba(0,0,0,.11)}
+.act{border:1px solid var(--line);border-radius:18px;margin:0 0 12px;box-shadow:var(--shadow);
+  transition:border-color .18s,transform .18s,background .18s;grid-template-columns:5px 1fr}
+.act:hover{background:#1C2F4D;border-color:#42648E;transform:translateY(-1px)}
+.act .body{padding:16px 18px}.act .t{font-weight:750;letter-spacing:-.015em}
+.lanes{margin-top:10px;gap:8px 16px}
+.tag{border-radius:100px;padding:3px 11px;font-weight:700;font-size:11.5px}
+.tag.solid{color:#0B2036}
+.banner{border-radius:16px;background:var(--surface);max-width:898px;padding:13px 16px}
+@media(min-width:931px){.banner{margin:14px auto 0}}
+.empty{background:rgba(24,42,68,.48);padding:27px 19px;border-radius:18px;
+  border:1px dashed #3C577B;line-height:1.6}
+.panel{border-radius:19px;padding:20px;margin:12px 0;box-shadow:var(--shadow)}
+.kv{gap:8px 18px;line-height:1.6}
+.form{gap:17px}
+.field>span{font-weight:650;color:#DCE9FC}
+.field input,.field select,.field textarea{border-radius:13px;background:#10213A;border:1px solid #385373;
+  padding:12px 14px;min-height:44px;transition:border-color .18s,box-shadow .18s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#88B9FA;box-shadow:0 0 0 3px rgba(89,161,247,.17)}
+.field textarea{min-height:95px}
+.thumbs{gap:11px}.thumb{border-radius:14px}.thumb img{transition:transform .18s}
+.thumb-zoom:hover img{transform:scale(1.025)}
+.evrow{grid-template-columns:minmax(96px,120px) 1fr;gap:15px}
+.flag{border-radius:100px;padding:3px 9px}
+.op{border-radius:17px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.tbl{border-radius:18px;border-color:var(--line);box-shadow:var(--shadow)}
+table{font-size:13.5px}th,td{padding:13px 15px;border-bottom-color:#304561}
+th{background:#1D3150;color:#B4C7E1;font-size:11.5px;font-weight:750;letter-spacing:.015em}
+tr:hover td{background:rgba(106,154,224,.055)}
+.users .u{padding:16px 18px;border-bottom-color:#304561}
+.users .u:hover{background:rgba(106,154,224,.055)}
+.sheet{background:var(--bg)}
+.sheet .sh{background:#152640;border-bottom-color:var(--line);padding:calc(14px + env(safe-area-inset-top,0px)) 20px 14px}
+.sheet .sh h2{font-size:18px;font-weight:750}
+.sheet .sb{max-width:760px;padding:24px 20px calc(40px + env(safe-area-inset-bottom,0px))}
+.dialog{background:rgba(2,11,25,.76);backdrop-filter:blur(6px)}
+.dlg{border:1px solid #354B70;border-radius:23px;padding:23px;max-width:480px;box-shadow:0 22px 75px rgba(0,0,0,.37)}
+.toast{background:#29456D;color:#fff;border:1px solid #53749B;border-radius:14px;box-shadow:var(--shadow)}
+.toast.err{background:#A6454A;color:#fff}
+nav.tabs{left:50%;right:auto;transform:translateX(-50%);bottom:14px;width:min(calc(100% - 30px),720px);
+  border:1px solid #38516F;border-radius:22px;background:rgba(24,43,70,.97);
+  box-shadow:0 8px 28px rgba(0,0,0,.28);padding:5px;gap:4px;backdrop-filter:blur(15px)}
+nav.tabs button{border:0;border-radius:16px;min-height:46px;padding:11px 5px;font-size:12.5px;
+  font-weight:700;transition:background .18s,color .18s;color:#A8BCD7}
+nav.tabs button[aria-current=page]{border:0;background:#274B79;color:#C9E1FF;box-shadow:inset 0 0 0 1px rgba(110,172,243,.16)}
+nav.tabs button:hover:not([aria-current=page]){background:rgba(79,124,182,.13);color:#E5F2FF}
+.login{max-width:430px;padding-top:clamp(56px,10vh,110px)}
+.login .mark{border-radius:22px;background:linear-gradient(140deg,#2A74C9,#103C78);box-shadow:0 15px 38px rgba(3,22,51,.32)}
+.login h1{font-size:30px}
+@media(max-width:600px){
+  main{padding:22px 15px calc(110px + env(safe-area-inset-bottom,0px))}
+  .top{padding:calc(12px + env(safe-area-inset-top,0px)) 14px 12px}
+  .brand{font-size:16px}.brand small{font-size:11px}
+  .head{flex-wrap:wrap;align-items:start}.head>.btn{margin-left:auto}
+  nav.tabs{width:calc(100% - 20px);bottom:calc(10px + env(safe-area-inset-bottom,0px));border-radius:20px}
+  nav.tabs button{font-size:11.5px;min-width:0}
+  .panel{padding:16px}.evrow{grid-template-columns:88px 1fr}
+  .tbl{margin-left:0;margin-right:0}
+  .kv{grid-template-columns:minmax(100px,auto) 1fr}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sheet" class="sheet" hidden></div>
+<div id="dialog" class="dialog" hidden></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<input id="camInput" class="vh" type="file" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">
+<script src="config.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+(() => {
+'use strict';
+const CFG = window.ACTIVA_CONFIG || {};
+const TZ = 'Asia/Jakarta';
+const LEVEL = { ADMIN: 4, PINCA: 3, CBM: 2, RM: 1, SO: 1 };
+const TYPE_LABEL = { KUNJUNGAN_NASABAH: 'Kunjungan nasabah', KUNJUNGAN_DEVELOPER: 'Kunjungan developer', PERSIAPAN_DOKUMEN: 'Persiapan dokumen kredit', LAINNYA: 'Lainnya' };
+const RESULT_LABEL = { SESUAI_RENCANA: 'Sesuai rencana', PERLU_TINDAK_LANJUT: 'Perlu tindak lanjut', TIDAK_BERTEMU: 'Tidak bertemu', LAINNYA: 'Lainnya' };
+const STATUS = {
+  PLANNED: ['Direncanakan', 'var(--s-plan)'], SUBMITTED: ['Menunggu persetujuan', 'var(--s-sub)'],
+  APPROVED: ['Disetujui', 'var(--s-ok)'], REVISION: ['Perlu revisi', 'var(--s-rev)'], CANCELLED: ['Dibatalkan', 'var(--s-cancel)']
+};
+const SYNC = { DRAFT: 'LOCAL_DRAFT', PENDING: 'PENDING_SYNC', SYNCING: 'SYNCING', FAILED: 'SYNC_FAILED', STORED: 'STORED_NOT_ACTIVE', SYNCED: 'SYNCED', CONFLICT: 'SYNC_CONFLICT' };
+const SYNC_LABEL = { LOCAL_DRAFT: 'Draf di perangkat', PENDING_SYNC: 'Menunggu kirim', SYNCING: 'Mengirim', SYNC_FAILED: 'Gagal kirim',
+  STORED_NOT_ACTIVE: 'Tersimpan, belum tertaut', SYNCED: 'Diterima server', SYNC_CONFLICT: 'Konflik dengan server' };
+const OP_LABEL = { CREATE: 'Rencana aktivitas', EVIDENCE: 'Foto bukti', OUTCOME: 'Hasil aktivitas', CANCEL: 'Pembatalan' };
+const FLAG_LABEL = { GPS_MISSING: 'GPS tidak ada', GPS_POOR: 'Akurasi GPS rendah', CAPTURE_GAP: 'Waktu file beda dari waktu ambil (mungkin dari galeri)',
+  CLOCK_SKEW: 'Jam perangkat tidak wajar', LATE_UPLOAD: 'Dikirim lebih dari 24 jam setelah diambil' };
+const RETRYABLE = new Set(['NETWORK', 'BUSY', 'SERVER_ERROR', 'INTEGRITY_FAILED', 'DEPENDENCY_PENDING']);
+const PAUSE = new Set(['AUTH_EXPIRED', 'AUTH_REQUIRED']);
+const STOP_ALL = new Set(['USER_DISABLED', 'NOT_REGISTERED', 'AUTH_INVALID']);
+const TYPE_ORDER = { CREATE: 0, EVIDENCE: 1, OUTCOME: 2, CANCEL: 2 };
+const MAX_ATTEMPTS = 15;
+
+const S = { token: null, tokenExp: 0, profile: null, view: null, range: 'today', syncing: false, needLogin: false,
+  blocked: null, branches: [], lastSyncAt: 0, gis: false, captureFor: null, gpsP: null, urls: [], reviewCache: {}, userCache: {}, ownerRecovery: [] };
+
+// ------------------------------------------------------------ utils
+const $ = (s, r) => (r || document).querySelector(s);
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const todayYmd = () => new Intl.DateTimeFormat('en-CA', { timeZone: TZ }).format(new Date());
+const shiftYmd = (ymd, n) => { const d = new Date(ymd + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const fmtDay = ymd => new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }).format(new Date(ymd + 'T00:00:00Z'));
+const fmtTime = iso => iso ? new Intl.DateTimeFormat('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: TZ }).format(new Date(iso)) : '-';
+const fmtMB = n => (n / 1048576).toFixed(n > 1048576 * 100 ? 0 : 1) + ' MB';
+
+// Google Maps URLs: user-initiated external navigation; no API key or remote map embed.
+// The coordinates are supplied only by a server-authorized listEvidence response.
+function evidenceMapsUrl(e) {
+  if (!e || e.latitude == null || e.longitude == null || e.latitude === '' || e.longitude === '') return '';
+  const lat = Number(e.latitude), lng = Number(e.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) return '';
+  // Zero/zero is a common empty-location placeholder, not a credible visit position.
+  if (lat === 0 && lng === 0) return '';
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lat + ',' + lng);
+}
+function evidenceMapsLink(e) {
+  const url = evidenceMapsUrl(e);
+  return url ? `<a class="btn ghost" href="${esc(url)}" target="_blank" rel="noopener noreferrer" aria-label="Buka lokasi foto bukti di Google Maps">Lihat di Google Maps ↗</a>`
+    : '<span class="sub small">Google Maps tidak tersedia: koordinat GPS tidak valid atau tidak ada.</span>';
+}
+
+function uuid() {
+  if (crypto.randomUUID) return crypto.randomUUID();
+  const b = crypto.getRandomValues(new Uint8Array(16)); b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+  const h = [...b].map(x => x.toString(16).padStart(2, '0')).join('');
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+}
+function decodeJwt(t) {
+  try {
+    const p = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(decodeURIComponent(escape(atob(p))));
+  } catch (e) { return null; }
+}
+const tokenValid = () => !!S.token && Date.now() < S.tokenExp - 60000;
+const isMaker = () => S.profile && LEVEL[S.profile.role] === 1;
+
+// ------------------------------------------------------------ IndexedDB
+const DB = {
+  db: null,
+  open() {
+    return new Promise((res, rej) => {
+      if (!('indexedDB' in window)) return rej(new Error('IndexedDB tidak tersedia'));
+      const r = indexedDB.open('activa', 1);
+      r.onupgradeneeded = () => {
+        const d = r.result;
+        d.createObjectStore('meta', { keyPath: 'key' });
+        d.createObjectStore('activities', { keyPath: 'activity_id' }).createIndex('owner', 'owner_email');
+        const o = d.createObjectStore('ops', { keyPath: 'op_id' });
+        o.createIndex('owner', 'owner_email'); o.createIndex('act', 'activity_id');
+        d.createObjectStore('blobs', { keyPath: 'capture_id' }).createIndex('act', 'activity_id');
+      };
+      r.onsuccess = () => { this.db = r.result; res(); };
+      r.onerror = () => rej(r.error || new Error('Gagal membuka IndexedDB'));
+      r.onblocked = () => rej(new Error('IndexedDB terblokir oleh tab lain'));
+    });
+  },
+  tx(stores, fn) {
+    return new Promise((res, rej) => {
+      const t = this.db.transaction(stores, 'readwrite');
+      t.oncomplete = () => res();
+      t.onerror = () => rej(t.error);
+      t.onabort = () => rej(t.error || new Error('Transaksi dibatalkan'));
+      fn(t);
+    });
+  },
+  req(r) { return new Promise((res, rej) => { r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); },
+  get(store, key) { return this.req(this.db.transaction(store).objectStore(store).get(key)); },
+  all(store, index, value) {
+    const os = this.db.transaction(store).objectStore(store);
+    return this.req(index ? os.index(index).getAll(value) : os.getAll());
+  },
+  put(store, val) { return this.tx([store], t => t.objectStore(store).put(val)); },
+  del(store, key) { return this.tx([store], t => t.objectStore(store).delete(key)); }
+};
+const getMeta = async k => { const r = await DB.get('meta', k); return r ? r.value : null; };
+const setMeta = (k, v) => DB.put('meta', { key: k, value: v });
+const myOps = () => DB.all('ops', 'owner', S.profile.email);
+const opsForAct = async id => (await DB.all('ops', 'act', id)).filter(o => o.owner_email === S.profile.email);
+const OFFLINE_GRACE_MS = (Number(CFG.OFFLINE_GRACE_HOURS) || 72) * 3600000;
+
+// ------------------------------------------------------------ UI primitives
+function toast(msg, kind) {
+  const t = $('#toast'); t.textContent = msg; t.className = 'toast show ' + (kind || '');
+  clearTimeout(toast._t); toast._t = setTimeout(() => { t.className = 'toast'; }, 4000);
+}
+function ask(title, body, buttons) {
+  return new Promise(res => {
+    const d = $('#dialog');
+    d.innerHTML = `<div class="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgT"><h2 id="dlgT">${esc(title)}</h2><p class="sub">${esc(body)}</p>
+      <div class="row">${buttons.map((b, i) => `<button class="btn ${b.cls || 'ghost'}" data-i="${i}">${esc(b.label)}</button>`).join('')}</div></div>`;
+    d.hidden = false;
+    d.onclick = e => {
+      const b = e.target.closest('[data-i]');
+      if (!b) return;
+      d.hidden = true; d.onclick = null; res(buttons[+b.dataset.i].value);
+    };
+    const first = d.querySelector('[data-i]'); if (first) first.focus();
+  });
+}
+function openSheet(title, html) {
+  revokeUrls();
+  const s = $('#sheet');
+  s.innerHTML = `<div class="sh"><button class="link" data-act="closeSheet" aria-label="Tutup">Tutup</button><h2>${esc(title)}</h2></div><div class="sb">${html}</div>`;
+  s.hidden = false; s.scrollTop = 0;
+}
+function closeSheet() { revokeUrls(); $('#sheet').hidden = true; $('#sheet').innerHTML = ''; }
+function revokeUrls() { S.urls.forEach(u => URL.revokeObjectURL(u)); S.urls = []; }
+function objUrl(buf, type) { const u = URL.createObjectURL(new Blob([buf], { type: type || 'image/jpeg' })); S.urls.push(u); return u; }
+const serverTag = a => {
+  if (a._local_only) return `<span class="tag local" style="--c:var(--muted)">Belum ada di server</span>`;
+  const [l, c] = STATUS[a.status] || [a.status, 'var(--muted)'];
+  return `<span class="tag solid" style="--c:${c}">${esc(l)}</span>`;
+};
+const syncTag = st => {
+  if (!st) return `<span class="sub">Tidak ada antrean</span>`;
+  if (st === SYNC.SYNCED) return `<span class="tag solid" style="--c:var(--s-ok)">${SYNC_LABEL[st]}</span>`;
+  const c = st === SYNC.CONFLICT || st === SYNC.FAILED ? 'var(--bad)' : st === SYNC.DRAFT ? 'var(--muted)' : 'var(--warn)';
+  return `<span class="tag local" style="--c:${c}">${esc(SYNC_LABEL[st])}</span>`;
+};
+function deviceState(a, ops) {
+  const open = ops.filter(o => o.status !== SYNC.SYNCED && !o.cancelled);
+  if (open.some(o => o.status === SYNC.CONFLICT)) return SYNC.CONFLICT;
+  if (open.some(o => o.status === SYNC.FAILED && o.terminal)) return SYNC.FAILED;
+  if (open.some(o => o.status === SYNC.SYNCING)) return SYNC.SYNCING;
+  if (open.length) return SYNC.PENDING;
+  if (a && a._draft) return SYNC.DRAFT;
+  return null;
+}
+
+// ------------------------------------------------------------ API
+function netErr(m) { const e = new Error(m); e.code = 'NETWORK'; return e; }
+async function api(action, data, timeout) {
+  if (!navigator.onLine) throw netErr('Perangkat offline.');
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), timeout || 20000);
+  let res;
+  try {
+    res = await fetch(CFG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action, token: S.token, data: data || {} }), signal: ctl.signal, redirect: 'follow', credentials: 'omit', cache: 'no-store' });
+  } catch (e) {
+    throw netErr(e.name === 'AbortError' ? 'Waktu tunggu server habis.' : 'Koneksi ke server gagal.');
+  } finally { clearTimeout(t); }
+  // Apps Script selalu menjawab 200 + JSON. Status lain atau HTML (halaman login/kuota/error Google)
+  // berarti hasil tidak pasti: diperlakukan sebagai NETWORK agar status dicek dulu sebelum retry.
+  if (!res.ok) throw netErr('Server menjawab HTTP ' + res.status + '.');
+  let body;
+  try { body = await res.json(); } catch (e) { throw netErr('Respons server bukan JSON (cek deployment web app).'); }
+  if (!body.ok) { const err = new Error(body.message || 'Permintaan ditolak.'); err.code = body.code; err.extra = body.extra; throw err; }
+  return body.data;
+}
+async function health() {
+  try {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 8000);
+    const r = await fetch(CFG.API_URL + '?action=health', { signal: ctl.signal });
+    clearTimeout(t);
+    const b = await r.json();
+    return b.ok ? b : null;
+  } catch (e) { return null; }
+}
+
+// ------------------------------------------------------------ Auth (Google Identity Services)
+function initGis() {
+  if (S.gis || !(window.google && google.accounts && google.accounts.id)) return;
+  google.accounts.id.initialize({ client_id: CFG.GOOGLE_CLIENT_ID, callback: onCredential, auto_select: true,
+    cancel_on_tap_outside: false, use_fedcm_for_prompt: true });
+  S.gis = true;
+  const g = $('#gbtn'); if (g) mountGisButton(g);
+  if (S.profile && !tokenValid() && navigator.onLine) { try { google.accounts.id.prompt(); } catch (e) {} }
+}
+function mountGisButton(el) {
+  if (!el) return;
+  if (!S.gis) { el.textContent = navigator.onLine ? 'Memuat tombol login…' : 'Butuh koneksi internet untuk login.'; return; }
+  el.innerHTML = '';
+  google.accounts.id.renderButton(el, { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill', locale: 'id', width: 280 });
+}
+function onCredential(resp) {
+  const p = decodeJwt(resp.credential);
+  if (!p) return toast('Token login tidak terbaca.', 'err');
+  S.token = resp.credential; S.tokenExp = p.exp * 1000;
+  sessionStorage.setItem('activa_tok', S.token);
+  if (!$('#sheet').hidden) closeSheet();
+  afterLogin();
+}
+async function afterLogin() {
+  try {
+    const me = await api('me');
+    const prof = Object.assign({}, me.user, { branch_name: me.branch_name, manageable_roles: me.manageable_roles });
+    const switched = S.profile && S.profile.email !== prof.email;
+    S.reviewCache = {}; S.userCache = {}; S.view = switched ? null : S.view;
+    S.profile = prof; S.needLogin = false; S.blocked = null;
+    await setMeta('profile', prof);
+    await setMeta('lastAuthAt', Date.now());
+    const others = (await DB.all('ops')).filter(o => o.owner_email !== prof.email && o.status !== SYNC.SYNCED).length;
+    if (others) toast(`Ada ${others} data akun lain di perangkat ini. Data itu tidak ditampilkan dan hanya bisa dikirim oleh pemiliknya.`);
+    const mineOpen = (await myOps()).filter(o => o.status !== SYNC.SYNCED && !o.cancelled).length;
+    if (mineOpen && !isMaker()) toast(`Peran Anda sekarang ${prof.role}. ${mineOpen} data lama di perangkat tidak dapat dikirim; hubungi atasan.`, 'err');
+    try { S.ownerRecovery = (await api('listRecoveries')).filter(r => r.can_respond_as_owner); } catch (e) { S.ownerRecovery = []; }
+    try { S.branches = await api('listBranches'); await setMeta('branches', S.branches); } catch (e) {}
+    render();
+    runSync(false);
+  } catch (e) {
+    if (STOP_ALL.has(e.code)) {
+      S.token = null; sessionStorage.removeItem('activa_tok');
+      if (S.profile) { S.blocked = e.message; render(); } else renderLogin(e.message);
+    } else if (S.profile) { render(); toast(e.message, 'err'); } else renderLogin(e.message);
+  }
+}
+function openRecoveryHelp() {
+  openSheet('Tidak bisa masuk', `
+    <h2>Lupa password atau akun Google terkunci</h2>
+    <p>ACTIVA tidak menyimpan password. Pemulihan dilakukan langsung oleh Google, bukan oleh admin aplikasi.</p>
+    <div class="row"><a class="btn" href="https://accounts.google.com/signin/recovery" target="_blank" rel="noopener noreferrer">Buka pemulihan akun Google</a></div>
+    <h2>Akun Google hilang permanen atau perlu ganti email</h2>
+    <p>Datangi atau hubungi atasan langsung Anda (RM/SO ke CBM, CBM ke PINCA, PINCA ke ADMIN) untuk verifikasi identitas. Atasan mengajukan pemulihan, lalu pemeriksa kedua menyetujui setelah masa tunggu. Email lama dinonaktifkan; riwayat aktivitas tetap tercatat atas email lama.</p>
+    <p>Jika akun lama masih bisa Anda buka, kirim dulu semua antrean di HP. Data yang belum terkirim tidak ikut pindah ke email baru.</p>
+    <h2>Akun mungkin disalahgunakan</h2>
+    <p>Minta atasan menonaktifkan akun Anda segera, lalu amankan akun Google Anda. Akun nonaktif langsung ditolak server.</p>
+    <p class="sub small">Data yang belum terkirim di perangkat ini hanya bisa dikirim oleh akun yang mengambilnya.</p>`);
+}
+function openLoginSheet() {
+  openSheet('Login ulang', `<p class="sub">Login dengan akun Google yang sama untuk mengirim data antrean.</p><div id="gbtn" class="gbtn"></div>`);
+  mountGisButton($('#gbtn'));
+}
+async function logout() {
+  const pending = (await myOps()).filter(o => o.status !== SYNC.SYNCED).length;
+  let wipe = true;
+  if (pending) {
+    const c = await ask(`Masih ada ${pending} data belum terkirim`,
+      'Jika data perangkat dihapus, foto dan hasil yang belum terkirim hilang permanen. Jika disimpan, data hanya muncul lagi setelah Anda login dengan akun yang sama.',
+      [{ label: 'Batal', value: null }, { label: 'Simpan & keluar', value: 'keep' }, { label: 'Hapus data & keluar', value: 'wipe', cls: 'danger' }]);
+    if (!c) return;
+    wipe = c === 'wipe';
+  } else {
+    const c = await ask('Keluar dari ACTIVA?', 'Data aktivitas yang tersimpan di perangkat ini akan dihapus.',
+      [{ label: 'Batal', value: null }, { label: 'Keluar', value: true, cls: 'danger' }]);
+    if (!c) return;
+  }
+  await doLogout(wipe);
+}
+async function doLogout(wipe) {
+  if (wipe) await wipeUser(S.profile.email);
+  await DB.del('meta', 'profile');
+  await DB.del('meta', 'lastAuthAt');
+  S.token = null; S.profile = null; S.view = null; S.reviewCache = {}; S.userCache = {}; S.ownerRecovery = [];
+  sessionStorage.removeItem('activa_tok');
+  try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+  renderLogin();
+}
+async function otherAccountsData() {
+  const ops = (await DB.all('ops')).filter(o => o.owner_email !== S.profile.email);
+  const acts = (await DB.all('activities')).filter(a => a.owner_email !== S.profile.email);
+  return { pending: ops.filter(o => o.status !== SYNC.SYNCED && !o.cancelled).length, ops, acts, owners: [...new Set(ops.map(o => o.owner_email).concat(acts.map(a => a.owner_email)))] };
+}
+async function wipeOthers() {
+  const o = await otherAccountsData();
+  if (!o.ops.length && !o.acts.length) return;
+  const ok = await ask('Hapus data akun lain?', `${o.pending} data belum terkirim milik akun lain akan hilang permanen dari perangkat ini. Lakukan hanya jika pemiliknya sudah setuju atau akun lamanya sudah dipulihkan.`,
+    [{ label: 'Batal', value: false }, { label: 'Hapus data akun lain', value: true, cls: 'danger' }]);
+  if (!ok) return;
+  for (const e of o.owners) await wipeUser(e);
+  toast('Data akun lain dihapus dari perangkat.'); renderView();
+}
+async function wipeUser(email) {
+  const ops = await DB.all('ops', 'owner', email);
+  const acts = await DB.all('activities', 'owner', email);
+  await DB.tx(['ops', 'blobs', 'activities'], t => {
+    ops.forEach(o => { t.objectStore('ops').delete(o.op_id); if (o.type === 'EVIDENCE') t.objectStore('blobs').delete(o.op_id); });
+    acts.forEach(a => t.objectStore('activities').delete(a.activity_id));
+  });
+}
+
+// ------------------------------------------------------------ Queue
+function makeOp(o) {
+  return Object.assign({ op_id: uuid(), owner_email: S.profile.email, status: SYNC.PENDING, attempts: 0, next_retry_at: 0,
+    created_at: new Date().toISOString(), seq: Date.now() + Math.random(), uncertain: false, terminal: false }, o);
+}
+let syncSoonT = null;
+function scheduleSyncSoon() { clearTimeout(syncSoonT); syncSoonT = setTimeout(() => runSync(false), 1500); }
+const backoff = n => Math.min(600000, 5000 * Math.pow(2, Math.max(0, n - 1))) * (0.8 + Math.random() * 0.4);
+
+async function runSync(manual) {
+  if (S.syncing || !S.profile || !isMaker() || S.blocked) return;
+  if (!navigator.onLine) { if (manual) toast('Perangkat offline. Data tetap aman di perangkat.'); return; }
+  if (!tokenValid()) {
+    S.needLogin = true; renderChrome();
+    if (manual) openLoginSheet();
+    return;
+  }
+  const exec = async () => {
+    S.syncing = true; renderChrome();
+    let sent = 0, failed = 0;
+    try {
+      if (!(await health())) { if (manual) toast('Server tidak terjangkau. Dicoba lagi otomatis.', 'err'); return; }
+      const uncertain = (await myOps()).filter(o => o.status !== SYNC.SYNCED && (o.uncertain || o.status === SYNC.SYNCING));
+      if (uncertain.length) await resolveUncertain(uncertain);
+      const due = (await myOps()).filter(o => [SYNC.PENDING, SYNC.FAILED, SYNC.STORED].includes(o.status) && !o.terminal
+        && (manual || o.next_retry_at <= Date.now()));
+      due.sort((a, b) => TYPE_ORDER[a.type] - TYPE_ORDER[b.type] || a.seq - b.seq);
+      const blocked = new Set();
+      for (const op of due) {
+        if (blocked.has(op.activity_id)) continue;
+        const r = await sendOp(op);
+        if (r === 'OK') sent++; else failed++;
+        if (r === 'PAUSE' || r === 'STOP') break;
+        if (r !== 'OK') blocked.add(op.activity_id);
+        renderChrome();
+      }
+      if (tokenValid() && !S.blocked) await pullActivities();
+      S.lastSyncAt = Date.now(); await setMeta('lastSyncAt', S.lastSyncAt);
+      if (manual) toast(failed ? `${sent} terkirim, ${failed} belum. Lihat Antrean.` : sent ? `${sent} data diterima server.` : 'Data sudah terbaru.', failed ? 'err' : '');
+    } catch (e) {
+      if (manual) toast(e.message, 'err');
+    } finally {
+      S.syncing = false; renderChrome(); refreshViewIfQuiet();
+    }
+  };
+  if (navigator.locks && navigator.locks.request) await navigator.locks.request('activa-sync', { ifAvailable: true }, async l => { if (l) await exec(); });
+  else await exec();
+}
+
+async function sendOp(op) {
+  op.status = SYNC.SYNCING; op.sync_started_at = new Date().toISOString(); op.attempts++;
+  await DB.put('ops', op);
+  try {
+    let data;
+    if (op.type === 'EVIDENCE') {
+      const b = await DB.get('blobs', op.op_id);
+      if (!b || !b.buf) {
+        Object.assign(op, { status: SYNC.FAILED, terminal: true, last_error: 'File foto lokal hilang dari perangkat.' });
+        await DB.put('ops', op); return 'FAIL';
+      }
+      data = await api('uploadEvidence', Object.assign({}, op.payload, { data_b64: bufToB64(b.buf), sync_started_at: op.sync_started_at }), 90000);
+      if (!data || data.sha256 !== op.payload.sha256 || data.activity_id !== op.activity_id) {
+        const err = new Error('Konfirmasi server tidak cocok dengan foto di perangkat.'); err.code = 'EVIDENCE_CONFLICT'; throw err;
+      }
+    } else {
+      const action = { CREATE: 'createActivity', OUTCOME: 'submitOutcome', CANCEL: 'cancelActivity' }[op.type];
+      data = await api(action, Object.assign({ op_id: op.op_id }, op.payload));
+    }
+    await markSynced(op, data);
+    return 'OK';
+  } catch (e) {
+    return handleOpError(op, e);
+  }
+}
+
+async function markSynced(op, data) {
+  Object.assign(op, { status: SYNC.SYNCED, uncertain: false, terminal: false, last_error: null, last_error_code: null,
+    sync_completed_at: (data && data.sync_completed_at) || new Date().toISOString(), server: data || null });
+  await DB.tx(['ops', 'blobs', 'activities'], t => {
+    t.objectStore('ops').put(op);
+    if (op.type === 'EVIDENCE') {
+      // Server sudah mengonfirmasi simpan + tautan (readback). Baru sekarang foto penuh dilepas; thumbnail disimpan.
+      const r = t.objectStore('blobs').get(op.op_id);
+      r.onsuccess = () => { if (r.result) { r.result.buf = null; t.objectStore('blobs').put(r.result); } };
+    }
+    if (data && data.activity) {
+      const as = t.objectStore('activities');
+      const r = as.get(data.activity.activity_id);
+      r.onsuccess = () => {
+        const prev = r.result || {};
+        const keepCount = prev.evidence_count || 0;
+        as.put(Object.assign({}, prev, data.activity, { _local_only: false, evidence_count: data.activity.evidence_count != null ? data.activity.evidence_count : keepCount }));
+      };
+    }
+  });
+}
+
+async function handleOpError(op, e) {
+  const code = e.code || 'SERVER_ERROR';
+  op.last_error = e.message; op.last_error_code = code;
+  if (code === 'NETWORK') op.uncertain = true; // permintaan mungkin sudah diproses server
+  if (PAUSE.has(code)) {
+    op.status = SYNC.PENDING; op.attempts = Math.max(0, op.attempts - 1);
+    await DB.put('ops', op);
+    S.token = null; S.needLogin = true; sessionStorage.removeItem('activa_tok');
+    return 'PAUSE';
+  }
+  if (STOP_ALL.has(code)) {
+    op.status = SYNC.PENDING; op.attempts = Math.max(0, op.attempts - 1);
+    await DB.put('ops', op);
+    S.blocked = e.message;
+    return 'STOP';
+  }
+  if (code === 'EVIDENCE_CONFLICT') {
+    op.status = SYNC.CONFLICT; op.uncertain = false;
+    await DB.put('ops', op); return 'FAIL';
+  }
+  if (code === 'SYNC_CONFLICT') {
+    op.status = SYNC.CONFLICT; op.conflict = (e.extra && e.extra.current) || null;
+    await DB.put('ops', op);
+    if (op.conflict) await mergeServerActivity(op.conflict);
+    return 'FAIL';
+  }
+  if (RETRYABLE.has(code) && op.attempts < MAX_ATTEMPTS) {
+    op.status = SYNC.FAILED; op.next_retry_at = Date.now() + backoff(op.attempts);
+    await DB.put('ops', op); return 'FAIL';
+  }
+  op.status = SYNC.FAILED; op.terminal = true;
+  await DB.put('ops', op);
+  return 'FAIL';
+}
+
+async function resolveUncertain(list) {
+  const caps = list.filter(o => o.type === 'EVIDENCE').map(o => o.op_id).slice(0, 25);
+  const ids = list.filter(o => o.type !== 'EVIDENCE').map(o => o.op_id).slice(0, 100);
+  let st;
+  try { st = await api('syncStatus', { capture_ids: caps, op_ids: ids }); } catch (e) { return; }
+  for (const r of st.evidence) {
+    const op = list.find(o => o.op_id === r.capture_id);
+    if (!op) continue;
+    if (r.state === 'ACTIVE' && r.record && r.record.sha256 === op.payload.sha256 && r.record.activity_id === op.activity_id) {
+      await markSynced(op, r.record); continue;
+    }
+    if (r.state === 'ACTIVE' || r.state === 'FOREIGN') {
+      Object.assign(op, { uncertain: false, status: SYNC.CONFLICT, last_error: 'Server menyimpan foto berbeda dengan ID ini.' });
+      await DB.put('ops', op); continue;
+    }
+    Object.assign(op, { uncertain: false, status: r.state === 'FILE_ONLY' ? SYNC.STORED : SYNC.PENDING });
+    await DB.put('ops', op);
+  }
+  for (const r of st.ops) {
+    const op = list.find(o => o.op_id === r.op_id);
+    if (!op) continue;
+    if (r.state === 'DONE') { await markSynced(op, r.result); continue; }
+    Object.assign(op, { uncertain: false, status: SYNC.PENDING });
+    await DB.put('ops', op);
+  }
+}
+
+async function mergeServerActivity(a) {
+  const prev = (await DB.get('activities', a.activity_id)) || {};
+  await DB.put('activities', Object.assign({}, prev, a, { _local_only: false }));
+}
+
+async function pullActivities() {
+  const t = todayYmd();
+  const res = await api('listActivities', { from: shiftYmd(t, -14), to: shiftYmd(t, 30) });
+  const local = await DB.all('activities', 'owner', S.profile.email);
+  const ops = await myOps();
+  const keep = new Set(ops.filter(o => o.type === 'CREATE' && o.status !== SYNC.SYNCED).map(o => o.activity_id));
+  const serverIds = new Set(res.items.map(a => a.activity_id));
+  await DB.tx(['activities'], tx => {
+    const s = tx.objectStore('activities');
+    res.items.forEach(a => {
+      const prev = local.find(x => x.activity_id === a.activity_id);
+      s.put(Object.assign({}, a, { _draft: prev ? prev._draft || null : null, _local_only: false }));
+    });
+    local.forEach(l => {
+      if (!serverIds.has(l.activity_id) && !keep.has(l.activity_id) && l.plan_date >= res.from && l.plan_date <= res.to) s.delete(l.activity_id);
+    });
+  });
+}
+
+async function pruneOld() {
+  if (!S.profile) return;
+  const cutoff = Date.now() - 30 * 86400000;
+  const old = (await myOps()).filter(o => o.status === SYNC.SYNCED && Date.parse(o.sync_completed_at || o.created_at) < cutoff);
+  if (!old.length) return;
+  await DB.tx(['ops', 'blobs'], t => old.forEach(o => { t.objectStore('ops').delete(o.op_id); t.objectStore('blobs').delete(o.op_id); }));
+}
+
+// ------------------------------------------------------------ Capture (kamera + GPS)
+function getGps(timeout) {
+  return new Promise(res => {
+    if (!('geolocation' in navigator)) return res({ error: 'NOT_SUPPORTED' });
+    let done = false;
+    const finish = v => { if (!done) { done = true; clearTimeout(tm); res(v); } };
+    const tm = setTimeout(() => finish({ error: 'TIMEOUT' }), (timeout || 20000) + 1000);
+    navigator.geolocation.getCurrentPosition(
+      p => finish({ lat: p.coords.latitude, lng: p.coords.longitude, accuracy: Math.round(p.coords.accuracy), captured_at: new Date(p.timestamp).toISOString() }),
+      err => finish({ error: ({ 1: 'PERMISSION_DENIED', 2: 'POSITION_UNAVAILABLE', 3: 'TIMEOUT' })[err.code] || 'UNKNOWN' }),
+      { enableHighAccuracy: true, timeout: timeout || 20000, maximumAge: 0 });
+  });
+}
+function startCapture(activityId) {
+  S.captureFor = activityId;
+  S.gpsP = getGps(20000); // mulai bersamaan dengan kamera
+  const inp = $('#camInput'); inp.value = ''; inp.click();
+}
+async function onCamChange() {
+  const f = $('#camInput').files[0];
+  const activityId = S.captureFor; S.captureFor = null;
+  if (!f || !activityId) return;
+  try { await processCapture(activityId, f, S.gpsP); }
+  catch (e) { toast(e.message, 'err'); }
+}
+function loadImg(file) {
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const im = new Image();
+    im.onload = () => { res(im); setTimeout(() => URL.revokeObjectURL(url), 2000); };
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error('Foto tidak dapat dibaca. Coba ambil ulang.')); };
+    im.src = url;
+  });
+}
+const toBlob = (c, q) => new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('Memori perangkat tidak cukup untuk memproses foto.')), 'image/jpeg', q));
+async function renderJpeg(img, at, gps) {
+  const MAX = 1600;
+  const k = Math.min(1, MAX / Math.max(img.naturalWidth, img.naturalHeight));
+  const w = Math.round(img.naturalWidth * k), h = Math.round(img.naturalHeight * k);
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d');
+  g.drawImage(img, 0, 0, w, h);
+  const fs = Math.max(14, Math.round(w / 48)), pad = Math.round(fs * 0.7), lh = fs * 1.35;
+  const lines = [
+    'BRI ACTIVA  ' + fmtTime(at.toISOString()) + ' WIB',
+    gps.error ? 'GPS tidak tersedia (' + gps.error + ')' : gps.lat.toFixed(6) + ', ' + gps.lng.toFixed(6) + '  ±' + gps.accuracy + ' m',
+    S.profile.email
+  ];
+  const band = lines.length * lh + pad * 2;
+  g.fillStyle = 'rgba(0,40,80,0.72)'; g.fillRect(0, h - band, w, band);
+  g.fillStyle = '#fff'; g.font = `600 ${fs}px Inter, system-ui, sans-serif`; g.textBaseline = 'top';
+  lines.forEach((l, i) => g.fillText(l, pad, h - band + pad + i * lh));
+  let q = 0.72, blob = await toBlob(c, q);
+  while (blob.size > 1.3 * 1048576 && q > 0.42) { q -= 0.1; blob = await toBlob(c, q); }
+  return blob;
+}
+async function renderThumb(img) {
+  const S2 = 240, k = S2 / Math.min(img.naturalWidth, img.naturalHeight);
+  const c = document.createElement('canvas'); c.width = S2; c.height = S2;
+  const w = img.naturalWidth * k, h = img.naturalHeight * k;
+  c.getContext('2d').drawImage(img, (S2 - w) / 2, (S2 - h) / 2, w, h);
+  return toBlob(c, 0.7);
+}
+async function sha256Hex(buf) {
+  const d = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(d)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function bufToB64(buf) {
+  const bytes = new Uint8Array(buf); let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+async function processCapture(activityId, f, gpsP) {
+  const captureAt = new Date();
+  if (f.type && !/^image\//.test(f.type)) throw new Error('File yang dipilih bukan gambar.');
+  if (f.size > 30 * 1048576) throw new Error('Foto terlalu besar (maks 30 MB sebelum kompresi).');
+  toast('Memproses foto…');
+  const img = await loadImg(f);
+  let gps = await (gpsP || getGps(15000));
+  if (gps.error === 'TIMEOUT') gps = await getGps(8000);
+  const jpg = await renderJpeg(img, captureAt, gps);
+  const thumb = await renderThumb(img);
+  const buf = await jpg.arrayBuffer();
+  const tbuf = await thumb.arrayBuffer();
+  const sha = await sha256Hex(buf);
+  const id = uuid();
+  const payload = { capture_id: id, activity_id: activityId, mime_type: 'image/jpeg', sha256: sha,
+    client_capture_time: captureAt.toISOString(), file_last_modified: f.lastModified ? new Date(f.lastModified).toISOString() : '', gps };
+  try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch (e) {}
+  try {
+    await DB.tx(['ops', 'blobs'], t => {
+      t.objectStore('blobs').put({ capture_id: id, activity_id: activityId, buf, thumb: tbuf, size: buf.byteLength });
+      t.objectStore('ops').put(makeOp({ op_id: id, type: 'EVIDENCE', activity_id: activityId, payload }));
+    });
+  } catch (e) {
+    if (e && e.name === 'QuotaExceededError') throw new Error('Penyimpanan perangkat penuh. Kirim antrean atau kosongkan ruang, lalu ambil ulang foto.');
+    throw new Error('Foto gagal disimpan di perangkat: ' + (e && e.message ? e.message : e));
+  }
+  const gpsNote = gps.error ? ' GPS tidak tersedia; CBM akan melihat tanda ini.' : gps.accuracy > 100 ? ` Akurasi GPS rendah (±${gps.accuracy} m).` : '';
+  toast('Foto tersimpan di perangkat.' + gpsNote, gps.error || gps.accuracy > 100 ? 'err' : '');
+  openAct(activityId);
+  renderChrome();
+  scheduleSyncSoon();
+}
+
+// ------------------------------------------------------------ Shell
+function tabsFor(role) {
+  if (LEVEL[role] === 1) return [['today', 'Aktivitas'], ['queue', 'Antrean'], ['history', 'Riwayat'], ['stats', 'Ringkasan'], ['account', 'Akun']];
+  if (role === 'CBM') return [['approvals', 'Persetujuan'], ['history', 'Riwayat'], ['stats', 'Tim'], ['users', 'Pengguna'], ['account', 'Akun']];
+  if (role === 'PINCA') return [['stats', 'Cabang'], ['history', 'Riwayat'], ['users', 'Pengguna'], ['account', 'Akun']];
+  return [['stats', 'Kanwil'], ['history', 'Riwayat'], ['users', 'Pengguna'], ['account', 'Akun']];
+}
+function renderLogin(msg) {
+  $('#app').innerHTML = `<div class="login"><div class="mark" aria-hidden="true"></div><h1>BRI ACTIVA</h1>
+    <p class="sub">Rencana, bukti kunjungan, dan persetujuan aktivitas RM dan SO.</p>
+    ${msg ? `<p class="banner err">${esc(msg)}</p>` : ''}
+    <div id="gbtn" class="gbtn"></div>
+    <button class="link" data-act="recoveryHelp">Tidak bisa masuk?</button>
+    <p class="sub small">Versi prototipe. Gunakan data contoh, bukan data nasabah sebenarnya.</p></div>`;
+  mountGisButton($('#gbtn'));
+}
+function render() {
+  if (!S.profile) return renderLogin();
+  const tabs = tabsFor(S.profile.role);
+  if (!S.view || !tabs.some(t => t[0] === S.view)) S.view = tabs[0][0];
+  $('#app').innerHTML = `<header class="top" id="top"></header><div id="banners"></div><main id="main"></main>
+    <nav class="tabs" aria-label="Menu utama">${tabs.map(([k, l]) => `<button data-act="nav" data-v="${k}" ${S.view === k ? 'aria-current="page"' : ''}>${l}</button>`).join('')}</nav>`;
+  renderChrome();
+  renderView();
+}
+async function renderChrome() {
+  const top = $('#top');
+  if (!top || !S.profile) return;
+  const online = navigator.onLine;
+  const pending = isMaker() ? (await myOps()).filter(o => o.status !== SYNC.SYNCED && !o.cancelled).length : 0;
+  top.innerHTML = `<div class="brand">BRI ACTIVA<small>${esc(S.profile.name || S.profile.email)}, ${esc(S.profile.role)} ${esc(S.profile.branch_name || S.profile.branch_code)}</small></div>
+    <div class="net"><span class="pill ${online ? '' : 'off'}">${online ? 'Online' : 'Offline'}</span>
+    ${isMaker() ? `<button class="syncbtn" data-act="sync" ${S.syncing ? 'disabled' : ''} aria-label="Kirim antrean, ${pending} menunggu">${S.syncing ? 'Mengirim' : 'Kirim'}<span class="n ${pending ? '' : 'zero'}">${pending}</span></button>` : ''}</div>`;
+  const b = [];
+  (S.ownerRecovery || []).forEach(r => b.push(`<div class="banner err"><span>Ada permintaan memindahkan akun Anda ke ${esc(r.new_email)}, diajukan ${esc(r.requested_by)}. Jika bukan atas permintaan Anda, tolak sekarang.</span>
+    <span class="row" style="margin:0"><button class="btn danger" data-act="ownerRec" data-d="CONTEST" data-id="${esc(r.request_id)}">Tolak, bukan saya</button>
+    <button class="btn ghost" data-act="ownerRec" data-d="CONFIRM_OWNER" data-id="${esc(r.request_id)}">Ya, ini permintaan saya</button></span></div>`));
+  if (S.blocked) b.push(`<div class="banner err"><span>${esc(S.blocked)} Data di perangkat tetap tersimpan dan tidak dikirim.</span></div>`);
+  else if (!tokenValid() && online) b.push(`<div class="banner"><span>Sesi login berakhir. Data tetap aman di perangkat.</span><button class="btn" data-act="login">Login ulang</button></div>`);
+  else if (!online) b.push(`<div class="banner"><span>Mode offline. Rencana, hasil, dan foto disimpan di perangkat dan dikirim saat online.</span></div>`);
+  $('#banners').innerHTML = b.join('');
+}
+let viewBusy = false;
+async function renderView() {
+  const m = $('#main'); if (!m) return;
+  viewBusy = true;
+  try {
+    const v = S.view;
+    if (v === 'today') await viewToday(m);
+    else if (v === 'queue') await viewQueue(m);
+    else if (v === 'stats') await viewStats(m);
+    else if (v === 'approvals') await viewApprovals(m);
+    else if (v === 'history') await viewHistory(m);
+    else if (v === 'users') await viewUsers(m);
+    else if (v === 'account') await viewAccount(m);
+  } catch (e) {
+    m.innerHTML = `<p class="banner err">${esc(e.message)}</p>`;
+  } finally { viewBusy = false; }
+}
+function refreshViewIfQuiet() {
+  if (!viewBusy && $('#sheet').hidden && ['today', 'queue'].includes(S.view)) renderView();
+}
+const needOnline = (m, title) => {
+  if (navigator.onLine && tokenValid()) return false;
+  m.innerHTML = `<h1>${esc(title)}</h1><div class="empty">Halaman ini membaca data langsung dari server. Sambungkan internet${tokenValid() ? '' : ' dan login ulang'} untuk melihatnya.</div>`;
+  return true;
+};
+
+// ------------------------------------------------------------ RM/SO: Aktivitas
+async function viewToday(m) {
+  const acts = await DB.all('activities', 'owner', S.profile.email);
+  const ops = await myOps();
+  const t = todayYmd();
+  let list = acts.filter(a => S.range === 'today' ? a.plan_date === t : S.range === 'week' ? a.plan_date >= t && a.plan_date <= shiftYmd(t, 6) : true);
+  list.sort((a, b) => (S.range === 'all' ? b.plan_date.localeCompare(a.plan_date) : a.plan_date.localeCompare(b.plan_date))
+    || String(a.client_created_at || a.created_at || '').localeCompare(String(b.client_created_at || b.created_at || '')));
+  const groups = [];
+  list.forEach(a => { const g = groups[groups.length - 1]; if (g && g[0] === a.plan_date) g[1].push(a); else groups.push([a.plan_date, [a]]); });
+  const seg = [['today', 'Hari ini'], ['week', '7 hari'], ['all', 'Semua']].map(([k, l]) => `<button data-act="range" data-v="${k}" aria-pressed="${S.range === k}">${l}</button>`).join('');
+  m.innerHTML = `<div class="head"><h1>Aktivitas</h1><button class="btn" data-act="newAct">Rencana baru</button></div>
+    <div class="seg" role="group" aria-label="Rentang">${seg}</div>
+    ${groups.length ? groups.map(([d, items]) => `<h2 class="day">${esc(fmtDay(d))}</h2>` + items.map(a => actRow(a, ops.filter(o => o.activity_id === a.activity_id))).join('')).join('')
+      : `<div class="empty" style="margin-top:14px">Belum ada aktivitas di rentang ini. Buat rencana kunjungan atau persiapan dokumen.</div>`}`;
+}
+function actRow(a, ops) {
+  const rail = a._local_only ? 'var(--muted)' : (STATUS[a.status] || [])[1] || 'var(--muted)';
+  return `<button class="act" data-act="openAct" data-id="${esc(a.activity_id)}" style="--c:${rail}"><span class="rail"></span><span class="body">
+    <span class="t">${esc(a.target_name)}</span><span class="sub">${esc(TYPE_LABEL[a.activity_type] || a.activity_type)}</span>
+    <span class="lanes"><span class="lane"><b>Server</b>${serverTag(a)}</span><span class="lane"><b>Perangkat</b>${syncTag(deviceState(a, ops))}</span></span>
+  </span></button>`;
+}
+function openNewAct() {
+  const t = todayYmd();
+  openSheet('Rencana aktivitas', `<form data-form="newAct" class="form">
+    <label class="field"><span>Tanggal</span><input type="date" name="plan_date" required value="${t}" min="${shiftYmd(t, -14)}" max="${shiftYmd(t, 60)}"></label>
+    <label class="field"><span>Jenis</span><select name="activity_type">${Object.entries(TYPE_LABEL).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
+    <label class="field"><span>Nasabah, developer, atau dokumen</span><input name="target_name" required maxlength="120" placeholder="Contoh: Perumahan Griya Asri"></label>
+    <label class="field"><span>Tujuan</span><textarea name="purpose" rows="3" maxlength="300" placeholder="Contoh: Tagih kelengkapan dokumen PBG"></textarea></label>
+    <p class="sub">Bisa dibuat saat offline. Rencana dikirim ke server saat ada koneksi.</p>
+    <button class="btn wide">Simpan rencana</button></form>`);
+}
+async function saveNewAct(f) {
+  const fd = new FormData(f);
+  const target = String(fd.get('target_name') || '').trim();
+  if (!target) throw new Error('Isi nama nasabah, developer, atau dokumen.');
+  const id = uuid(), now = new Date().toISOString();
+  const act = { activity_id: id, owner_email: S.profile.email, branch_code: S.profile.branch_code, plan_date: fd.get('plan_date'),
+    activity_type: fd.get('activity_type'), target_name: target, purpose: String(fd.get('purpose') || '').trim(),
+    status: 'PLANNED', version: 1, evidence_count: 0, _local_only: true, client_created_at: now };
+  await DB.tx(['activities', 'ops'], t => {
+    t.objectStore('activities').put(act);
+    t.objectStore('ops').put(makeOp({ type: 'CREATE', activity_id: id, payload: { activity_id: id, plan_date: act.plan_date,
+      activity_type: act.activity_type, target_name: act.target_name, purpose: act.purpose, client_created_at: now } }));
+  });
+  closeSheet(); toast('Rencana disimpan di perangkat.');
+  S.range = act.plan_date === todayYmd() ? 'today' : 'all';
+  renderView(); renderChrome(); scheduleSyncSoon();
+}
+async function openAct(id) {
+  const a = await DB.get('activities', id);
+  if (!a || a.owner_email !== S.profile.email) return toast('Aktivitas tidak ditemukan di perangkat.', 'err');
+  const ops = await opsForAct(id);
+  const mine = new Set(ops.map(o => o.op_id));
+  const blobs = (await DB.all('blobs', 'act', id)).filter(b => mine.has(b.capture_id));
+  const ev = ops.filter(o => o.type === 'EVIDENCE').sort((x, y) => x.seq - y.seq);
+  const pOut = ops.find(o => o.type === 'OUTCOME' && o.status !== SYNC.SYNCED);
+  const pCancel = ops.find(o => o.type === 'CANCEL' && o.status !== SYNC.SYNCED);
+  const editable = ['PLANNED', 'REVISION'].includes(a.status) && !pOut && !pCancel;
+  const unsyncedPhotos = ev.filter(o => o.status !== SYNC.SYNCED && !o.terminal).length;
+  const photoTotal = (a.evidence_count || 0) + unsyncedPhotos;
+
+  const thumbs = ev.map(o => {
+    const b = blobs.find(x => x.capture_id === o.op_id);
+    const src = b && b.thumb ? objUrl(b.thumb) : '';
+    const tag = o.status === SYNC.SYNCED ? `<span class="tag solid" style="--c:var(--s-ok)">Server</span>`
+      : `<span class="tag local" style="--c:${o.terminal ? 'var(--bad)' : 'var(--warn)'}">${o.cancelled ? 'Batal' : o.terminal ? 'Gagal' : 'Perangkat'}</span>`;
+    return `<div class="thumb">${src ? `<img src="${src}" alt="Foto bukti ${esc(fmtTime(o.payload.client_capture_time))}">` : ''}${tag}</div>`;
+  }).join('');
+
+  const outcomeShown = pOut ? pOut.payload : (a.status !== 'PLANNED' && a.outcome_note ? a : null);
+  openSheet(a.target_name, `
+    <p class="sub">${esc(TYPE_LABEL[a.activity_type] || a.activity_type)}, ${esc(fmtDay(a.plan_date))}</p>
+    ${a.purpose ? `<p>${esc(a.purpose)}</p>` : ''}
+    <div class="panel"><div class="lanes" style="margin:0"><span class="lane"><b>Server</b>${serverTag(a)}</span><span class="lane"><b>Perangkat</b>${syncTag(deviceState(a, ops))}</span></div>
+      ${a.status === 'REVISION' && a.review_note ? `<p style="margin:10px 0 0"><b>Catatan revisi CBM:</b> ${esc(a.review_note)}</p>` : ''}
+      ${pOut ? `<p class="sub" style="margin:10px 0 0">Hasil tersimpan di perangkat. Status di server tetap "${esc((STATUS[a.status] || [a.status])[0])}" sampai hasil diterima server.</p>` : ''}
+    </div>
+    <h2>Foto bukti (${photoTotal})</h2>
+    ${thumbs ? `<div class="thumbs">${thumbs}</div>` : `<p class="sub">Belum ada foto di perangkat ini${a.evidence_count ? `; ${a.evidence_count} foto sudah ada di server` : ''}.</p>`}
+    ${editable ? `<div class="row"><button class="btn" data-act="capture" data-id="${esc(id)}">Ambil foto bukti</button></div>
+      <p class="sub small" style="margin-top:8px">Waktu, koordinat GPS, dan email dicetak di foto. Jangan memotret KTP, KK, atau dokumen pribadi nasabah.</p>` : ''}
+    ${outcomeShown ? `<h2>Hasil</h2><div class="panel"><b>${esc(RESULT_LABEL[outcomeShown.outcome_result] || outcomeShown.outcome_result)}</b><p style="margin:6px 0 0">${esc(outcomeShown.outcome_note)}</p></div>` : ''}
+    ${editable ? `<h2>${a.status === 'REVISION' ? 'Perbaiki hasil' : 'Isi hasil'}</h2>
+      <form data-form="outcome" data-id="${esc(id)}" class="form">
+        <label class="field"><span>Hasil</span><select name="outcome_result">${Object.entries(RESULT_LABEL).map(([k, v]) => `<option value="${k}" ${(a._draft && a._draft.outcome_result === k) || (!a._draft && a.outcome_result === k) ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
+        <label class="field"><span>Catatan hasil</span><textarea name="outcome_note" rows="4" maxlength="1000" required placeholder="Apa yang dibahas dan tindak lanjutnya">${esc(a._draft ? a._draft.outcome_note : a.status === 'REVISION' ? a.outcome_note : '')}</textarea></label>
+        <div class="row" style="margin-top:0"><button type="button" class="btn ghost" data-act="saveDraft" data-id="${esc(id)}">Simpan draf</button>
+        <button class="btn" ${photoTotal ? '' : 'disabled'}>Kirim untuk persetujuan</button></div>
+        ${photoTotal ? '' : `<p class="sub small">Ambil minimal 1 foto bukti sebelum mengirim.</p>`}
+      </form>
+      <div class="row"><button class="link danger" data-act="cancelAct" data-id="${esc(id)}">Batalkan aktivitas</button></div>` : ''}
+  `);
+}
+async function saveDraft(id, form) {
+  const a = await DB.get('activities', id); const fd = new FormData(form);
+  a._draft = { outcome_result: fd.get('outcome_result'), outcome_note: String(fd.get('outcome_note') || ''), saved_at: new Date().toISOString() };
+  await DB.put('activities', a);
+  toast('Draf disimpan di perangkat. Belum dikirim.');
+}
+async function submitOutcome(id, form) {
+  const a = await DB.get('activities', id);
+  const fd = new FormData(form);
+  const result = fd.get('outcome_result'), note = String(fd.get('outcome_note') || '').trim();
+  if (!note) throw new Error('Isi catatan hasil dulu.');
+  const ops = await opsForAct(id);
+  const photos = (a.evidence_count || 0) + ops.filter(o => o.type === 'EVIDENCE' && o.status !== SYNC.SYNCED && !o.terminal).length;
+  if (photos < 1) throw new Error('Ambil minimal 1 foto bukti sebelum mengirim.');
+  if (ops.some(o => (o.type === 'OUTCOME' || o.type === 'CANCEL') && o.status !== SYNC.SYNCED)) throw new Error('Aktivitas ini sudah punya data dalam antrean.');
+  a._draft = null;
+  await DB.tx(['activities', 'ops'], t => {
+    t.objectStore('activities').put(a);
+    t.objectStore('ops').put(makeOp({ type: 'OUTCOME', activity_id: id, payload: { activity_id: id, base_version: a.version, outcome_result: result, outcome_note: note } }));
+  });
+  closeSheet();
+  toast(navigator.onLine ? 'Hasil masuk antrean dan sedang dikirim.' : 'Hasil tersimpan di perangkat. Dikirim saat online.');
+  renderView(); renderChrome(); scheduleSyncSoon();
+}
+async function cancelAct(id) {
+  const ok = await ask('Batalkan aktivitas ini?', 'Foto yang belum terkirim tidak akan dikirim, tetapi tetap ada di Antrean sampai Anda menghapusnya.',
+    [{ label: 'Kembali', value: false }, { label: 'Batalkan aktivitas', value: true, cls: 'danger' }]);
+  if (!ok) return;
+  const a = await DB.get('activities', id);
+  const ops = await opsForAct(id);
+  const create = ops.find(o => o.type === 'CREATE');
+  const neverSent = a._local_only && create && create.status === SYNC.PENDING && !create.uncertain && create.attempts === 0;
+  await DB.tx(['activities', 'ops'], t => {
+    const os = t.objectStore('ops');
+    ops.filter(o => o.type === 'EVIDENCE' && o.status !== SYNC.SYNCED).forEach(o => {
+      Object.assign(o, { status: SYNC.FAILED, terminal: true, cancelled: true, last_error: 'Aktivitas dibatalkan sebelum foto terkirim.' }); os.put(o);
+    });
+    if (neverSent) { os.delete(create.op_id); t.objectStore('activities').delete(id); }
+    else os.put(makeOp({ type: 'CANCEL', activity_id: id, payload: { activity_id: id, base_version: a.version, note: '' } }));
+  });
+  closeSheet(); toast(neverSent ? 'Rencana dibatalkan. Belum pernah dikirim ke server.' : 'Pembatalan masuk antrean.');
+  renderView(); renderChrome(); scheduleSyncSoon();
+}
+
+// ------------------------------------------------------------ RM/SO: Antrean
+async function viewQueue(m) {
+  const ops = (await myOps()).sort((a, b) => b.seq - a.seq);
+  const acts = await DB.all('activities', 'owner', S.profile.email);
+  const name = id => { const a = acts.find(x => x.activity_id === id); return a ? a.target_name : '(aktivitas tidak ada di perangkat)'; };
+  const open = ops.filter(o => o.status !== SYNC.SYNCED), done = ops.filter(o => o.status === SYNC.SYNCED).slice(0, 15);
+  let est = null; try { if (navigator.storage && navigator.storage.estimate) est = await navigator.storage.estimate(); } catch (e) {}
+  const row = o => `<div class="op"><div class="h"><div><b>${OP_LABEL[o.type]}</b><div class="sub">${esc(name(o.activity_id))}</div></div>${syncTag(o.status)}</div>
+    <div class="sub small" style="margin-top:6px">Dibuat ${esc(fmtTime(o.created_at))}${o.type === 'EVIDENCE' ? `, diambil ${esc(fmtTime(o.payload.client_capture_time))}${o.payload.gps && !o.payload.gps.error ? `, GPS ±${o.payload.gps.accuracy} m` : ', tanpa GPS'}` : ''}
+      ${o.attempts ? `, percobaan ${o.attempts}` : ''}${o.status === SYNC.FAILED && !o.terminal && o.next_retry_at ? `, coba lagi ${esc(fmtTime(new Date(o.next_retry_at).toISOString()))}` : ''}
+      ${o.status === SYNC.SYNCED ? `, diterima ${esc(fmtTime(o.sync_completed_at))}` : ''}</div>
+    ${o.last_error && o.status !== SYNC.SYNCED ? `<div class="err">${esc(o.last_error)}</div>` : ''}
+    ${o.status === SYNC.CONFLICT ? `<div class="sub small">Data di server sudah berubah sejak Anda mengisi. ${o.type === 'OUTCOME' ? 'Kirim ulang memakai versi terbaru, atau buang perubahan lokal.' : ''}</div>` : ''}
+    ${o.status !== SYNC.SYNCED ? `<div class="row">
+      ${(o.status === SYNC.FAILED && !o.cancelled) ? `<button class="btn ghost" data-act="retryOp" data-id="${o.op_id}">Coba lagi</button>` : ''}
+      ${(o.status === SYNC.CONFLICT && o.type === 'OUTCOME') ? `<button class="btn ghost" data-act="resendOp" data-id="${o.op_id}">Kirim ulang</button>` : ''}
+      ${(o.terminal || o.status === SYNC.CONFLICT || o.cancelled) ? `<button class="link danger" data-act="discardOp" data-id="${o.op_id}">Hapus dari perangkat</button>` : ''}
+    </div>` : ''}</div>`;
+  m.innerHTML = `<h1>Antrean kirim</h1>
+    <p class="sub">Label bergaris putus-putus berarti data baru ada di perangkat ini dan belum diterima server.</p>
+    ${open.length ? open.map(row).join('') : `<div class="empty">Tidak ada data yang menunggu. Semua sudah diterima server.</div>`}
+    ${done.length ? `<h2>Terakhir diterima server</h2>${done.map(row).join('')}` : ''}
+    <p class="sub small" style="margin-top:16px">Kirim terakhir: ${S.lastSyncAt ? esc(fmtTime(new Date(S.lastSyncAt).toISOString())) : 'belum pernah'}${est ? `. Penyimpanan perangkat: ${fmtMB(est.usage || 0)} dari ${fmtMB(est.quota || 0)}` : ''}.</p>`;
+}
+async function retryOp(id) {
+  const o = await DB.get('ops', id); if (!o) return;
+  Object.assign(o, { status: SYNC.PENDING, terminal: false, attempts: 0, next_retry_at: 0 });
+  await DB.put('ops', o); renderView(); runSync(true);
+}
+async function discardOp(id) {
+  const o = await DB.get('ops', id); if (!o) return;
+  const ok = await ask('Hapus dari perangkat?', o.type === 'EVIDENCE' ? 'Foto ini belum diterima server dan akan hilang permanen.' : 'Perubahan ini belum diterima server dan akan dibuang.',
+    [{ label: 'Batal', value: false }, { label: 'Hapus', value: true, cls: 'danger' }]);
+  if (!ok) return;
+  const a = await DB.get('activities', o.activity_id);
+  await DB.tx(['ops', 'blobs', 'activities'], t => {
+    t.objectStore('ops').delete(id);
+    if (o.type === 'EVIDENCE') t.objectStore('blobs').delete(id);
+    if (o.type === 'CREATE' && a && a._local_only) t.objectStore('activities').delete(o.activity_id);
+  });
+  renderView(); renderChrome();
+}
+async function resendOp(id) {
+  const o = await DB.get('ops', id); if (!o) return;
+  const a = await DB.get('activities', o.activity_id);
+  if (!a || !['PLANNED', 'REVISION'].includes(a.status)) {
+    return toast('Status di server sekarang ' + (a ? (STATUS[a.status] || [a.status])[0] : 'tidak diketahui') + '. Hasil tidak dapat dikirim ulang.', 'err');
+  }
+  const n = makeOp({ type: 'OUTCOME', activity_id: o.activity_id, payload: Object.assign({}, o.payload, { base_version: a.version }) });
+  await DB.tx(['ops'], t => { t.objectStore('ops').delete(id); t.objectStore('ops').put(n); });
+  renderView(); runSync(true);
+}
+
+// ------------------------------------------------------------ Ringkasan (data server)
+async function viewStats(m) {
+  const title = { CBM: 'Produktivitas tim', PINCA: 'Produktivitas cabang', ADMIN: 'Produktivitas Kanwil' }[S.profile.role] || 'Ringkasan saya';
+  let localBlock = '';
+  if (isMaker()) {
+    const n = (await myOps()).filter(o => o.status !== SYNC.SYNCED && !o.cancelled).length;
+    localBlock = `<div class="panel" style="border:1.5px dashed var(--warn)"><b>${n}</b> data di perangkat ini belum diterima server dan tidak dihitung di tabel.</div>`;
+  }
+  if (needOnline(m, title)) { m.insertAdjacentHTML('beforeend', localBlock); return; }
+  m.innerHTML = `<h1>${title}</h1><p class="sub">Memuat…</p>`;
+  const d = await api('dashboard');
+  const cols = ['PLANNED', 'SUBMITTED', 'APPROVED', 'REVISION', 'CANCELLED'];
+  const tot = cols.reduce((o, c) => (o[c] = d.rows.reduce((s, r) => s + (r[c] || 0), 0), o), {});
+  const totalAll = d.rows.reduce((s, r) => s + r.total, 0);
+  m.innerHTML = `<h1>${title}</h1><p class="sub">Periode ${esc(d.period)}. Hanya data yang sudah diterima server.</p>${localBlock}
+    ${d.rows.length ? `<div class="tbl"><table><thead><tr><th>${d.group_by === 'branch' ? 'Cabang' : 'Nama'}</th>${cols.map(c => `<th>${STATUS[c][0]}</th>`).join('')}<th>Total</th></tr></thead>
+    <tbody>${d.rows.map(r => `<tr><td>${esc(r.label)}</td>${cols.map(c => `<td>${r[c] || '-'}</td>`).join('')}<td><b>${r.total}</b></td></tr>`).join('')}
+    <tr><td><b>Total</b></td>${cols.map(c => `<td><b>${tot[c] || '-'}</b></td>`).join('')}<td><b>${totalAll}</b></td></tr></tbody></table></div>`
+      : `<div class="empty">Belum ada aktivitas tercatat di server bulan ini.</div>`}
+    ${d.reviewers.length && !isMaker() ? `<h2>Kinerja persetujuan CBM</h2><div class="tbl"><table><thead><tr><th>CBM</th><th>Ditinjau</th><th>Diminta revisi</th><th>Rata-rata jam</th></tr></thead>
+    <tbody>${d.reviewers.map(r => `<tr><td>${esc(r.name)}</td><td>${r.reviewed}</td><td>${r.revisions}</td><td>${r.avg_hours}</td></tr>`).join('')}</tbody></table></div>` : ''}`;
+}
+
+// ------------------------------------------------------------ CBM: Persetujuan
+async function viewApprovals(m) {
+  if (needOnline(m, 'Persetujuan')) return;
+  m.innerHTML = `<h1>Persetujuan</h1><p class="sub">Memuat…</p>`;
+  const t = todayYmd();
+  const r = await api('listActivities', { status: 'SUBMITTED', from: shiftYmd(t, -90), to: shiftYmd(t, 60) });
+  S.reviewCache = {}; r.items.forEach(a => { S.reviewCache[a.activity_id] = a; });
+  const items = r.items.sort((a, b) => String(a.submitted_at).localeCompare(String(b.submitted_at)));
+  m.innerHTML = `<h1>Persetujuan</h1><p class="sub">${items.length} aktivitas menunggu, terlama di atas.</p>
+    ${items.length ? items.map(a => `<button class="act" data-act="openReview" data-id="${esc(a.activity_id)}" style="--c:var(--s-sub)"><span class="rail"></span><span class="body">
+      <span class="t">${esc(a.target_name)}</span><span class="sub">${esc(a.owner_name)}, ${esc(TYPE_LABEL[a.activity_type] || a.activity_type)}, ${esc(fmtDay(a.plan_date))}</span>
+      <span class="sub small">Dikirim ${esc(fmtTime(a.submitted_at))}, ${a.evidence_count} foto</span></span></button>`).join('')
+      : `<div class="empty">Tidak ada aktivitas yang menunggu persetujuan.</div>`}`;
+}
+async function openReview(id) {
+  const a = S.reviewCache[id]; if (!a) return;
+  openSheet(a.target_name, `<p class="sub">${esc(a.owner_name)}, ${esc(TYPE_LABEL[a.activity_type] || a.activity_type)}, ${esc(fmtDay(a.plan_date))}</p>
+    ${a.purpose ? `<p>${esc(a.purpose)}</p>` : ''}
+    <div class="panel"><b>${esc(RESULT_LABEL[a.outcome_result] || a.outcome_result)}</b><p style="margin:6px 0 0">${esc(a.outcome_note)}</p></div>
+    <h2>Foto bukti</h2><div id="evList"><p class="sub">Memuat foto…</p></div>
+    <p class="sub small">Waktu dan GPS berasal dari perangkat RM/SO, bukan bukti independen. Periksa tanda peringatan.</p>
+    <form data-form="review" data-id="${esc(id)}" class="form" style="margin-top:12px">
+      <label class="field"><span>Catatan (wajib untuk revisi)</span><textarea name="note" rows="3" maxlength="500"></textarea></label>
+      <div class="row" style="margin-top:0"><button type="button" class="btn ok" data-act="review" data-d="APPROVE" data-id="${esc(id)}">Setujui</button>
+      <button type="button" class="btn danger" data-act="review" data-d="REVISION" data-id="${esc(id)}">Minta revisi</button></div></form>`);
+  try {
+    const ev = await api('listEvidence', { activity_id: id });
+    const box = $('#evList'); if (!box) return;
+    box.innerHTML = ev.length ? ev.map(e => `<div class="evrow"><div class="thumb" id="im_${e.capture_id}"></div><div class="small">
+      <div>Diambil ${esc(fmtTime(e.client_capture_time))}</div><div>Diterima server ${esc(fmtTime(e.server_received_at))} (jeda ${e.upload_delay_min} menit)</div>
+      <div>${e.latitude != null ? `${esc(String(e.latitude))}, ${esc(String(e.longitude))} ±${esc(String(e.gps_accuracy))} m` : 'Tanpa GPS'}</div>
+      <div style="margin-top:8px">${evidenceMapsLink(e)}</div>
+      ${e.flags.map(f => `<span class="flag">${esc(FLAG_LABEL[f] || f)}</span>`).join('')}</div></div>`).join('') : `<p class="sub">Tidak ada foto.</p>`;
+    for (const e of ev) {
+      try {
+        const r = await api('getEvidenceImage', { capture_id: e.capture_id }, 45000);
+        const el = document.getElementById('im_' + e.capture_id);
+        if (el) el.innerHTML = `<button type="button" data-act="zoomImage" class="thumb-zoom" aria-label="Perbesar foto bukti"><img src="data:image/jpeg;base64,${r.data_b64}" alt="Foto bukti"></button>`;
+      } catch (err) { /* lanjut ke foto berikutnya */ }
+    }
+  } catch (e) { const box = $('#evList'); if (box) box.innerHTML = `<p class="banner err">${esc(e.message)}</p>`; }
+}
+async function doReview(id, decision, form) {
+  const a = S.reviewCache[id]; if (!a) return;
+  const note = String(new FormData(form).get('note') || '').trim();
+  if (decision === 'REVISION' && !note) return toast('Tulis catatan revisi untuk RM/SO.', 'err');
+  form.querySelectorAll('button').forEach(b => { b.disabled = true; });
+  try {
+    await api('reviewActivity', { activity_id: id, base_version: a.version, decision, note });
+    toast(decision === 'APPROVE' ? 'Aktivitas disetujui.' : 'Revisi diminta.');
+    closeSheet(); renderView();
+  } catch (e) {
+    toast(e.message, 'err'); form.querySelectorAll('button').forEach(b => { b.disabled = false; });
+    if (e.code === 'SYNC_CONFLICT') { closeSheet(); renderView(); }
+  }
+}
+
+// ------------------------------------------------------------ Riwayat server: read-only, termasuk APPROVED
+function historyWindow() {
+  const today = todayYmd();
+  return { from: S.historyFrom || shiftYmd(today, -90), to: S.historyTo || today };
+}
+async function viewHistory(m) {
+  if (needOnline(m, 'Riwayat')) return;
+  const w = historyWindow();
+  m.innerHTML = '<h1>Riwayat aktivitas</h1><p class="sub">Memuat riwayat dari server…</p>';
+  const result = await api('listActivities', w);
+  S.historyCache = {};
+  let items = result.items || [];
+  items.forEach(a => { S.historyCache[a.activity_id] = a; });
+  const states = ['', 'PLANNED', 'SUBMITTED', 'APPROVED', 'REVISION', 'CANCELLED'];
+  const filter = S.historyStatus || '';
+  if (filter) items = items.filter(a => a.status === filter);
+  items.sort((a,b) => String(b.plan_date).localeCompare(String(a.plan_date)) || String(b.updated_at).localeCompare(String(a.updated_at)));
+  m.innerHTML = `<h1>Riwayat aktivitas</h1><p class="sub">Data server · aktivitas approved tetap dapat dibaca, tidak dapat diedit.</p>
+    <form class="form" data-form="historyFilter" style="margin:10px 0 16px">
+      <div class="row" style="margin:0"><label class="field" style="flex:1"><span>Dari</span><input type="date" name="from" value="${esc(w.from)}" required></label>
+      <label class="field" style="flex:1"><span>Sampai</span><input type="date" name="to" value="${esc(w.to)}" required></label></div>
+      <label class="field"><span>Status</span><select name="status">${states.map(x=>`<option value="${x}" ${x===filter?'selected':''}>${x ? esc((STATUS[x]||[x])[0]) : 'Semua status'}</option>`).join('')}</select></label>
+      <button class="btn">Terapkan filter</button></form>
+    <p class="sub small">${items.length} aktivitas ditemukan dalam rentang pilihan.</p>
+    ${items.length ? items.map(a=>`<button class="act" data-act="openHistory" data-id="${esc(a.activity_id)}" style="--c:${(STATUS[a.status]||['','var(--muted)'])[1]}">
+    <span class="rail"></span><span class="body"><span class="t">${esc(a.target_name)}</span>
+    <span class="sub small">${esc(a.owner_name||a.owner_email)} · ${esc(fmtDay(a.plan_date))} · ${esc(TYPE_LABEL[a.activity_type]||a.activity_type)}</span>
+    <span class="sub small">${esc((STATUS[a.status]||[a.status])[0])} · ${Number(a.evidence_count)||0} foto</span></span></button>`).join('') : '<div class="empty">Belum ada aktivitas sesuai filter.</div>'}`;
+}
+async function openHistory(id) {
+  const a = (S.historyCache||{})[id];
+  if (!a) return toast('Aktivitas tidak ditemukan dalam daftar.', 'err');
+  openSheet('Riwayat · ' + a.target_name, `<p class="sub">${esc(a.owner_name||a.owner_email)} · ${esc(a.branch_code)} · ${esc(TYPE_LABEL[a.activity_type]||a.activity_type)}</p>
+    <div class="panel"><b>${esc((STATUS[a.status]||[a.status])[0])}</b><p>Tanggal rencana: ${esc(fmtDay(a.plan_date))}</p>
+    <p>Tujuan: ${esc(a.purpose||'—')}</p><p>Hasil: ${esc(RESULT_LABEL[a.outcome_result]||a.outcome_result||'—')}</p>
+    <p>Catatan: ${esc(a.outcome_note||'—')}</p></div>
+    <h2>Riwayat keputusan</h2><div class="panel"><p>Dikirim: ${esc(fmtTime(a.submitted_at))}</p>
+    <p>Reviewer: ${esc(a.reviewed_by||'—')}</p><p>Keputusan terakhir: ${esc(fmtTime(a.reviewed_at))}</p>
+    <p>Catatan reviewer: ${esc(a.review_note||'—')}</p></div>
+    <h2>Jejak perubahan tercatat</h2><div id="historyAudit"><p class="sub">Memuat audit…</p></div>
+    <h2>Foto dan GPS</h2><div id="historyEvidence"><p class="sub">Memuat foto dari server…</p></div>
+    <p class="sub small">Read-only. Waktu dan GPS dari perangkat, bukan bukti independen. Riwayat keputusan yang belum pernah disimpan tidak direkonstruksi.</p>`);
+  try {
+    const events = await api('getActivityAudit', { activity_id: id });
+    const auditBox = $('#historyAudit');
+    if (auditBox) auditBox.innerHTML = events.length ? `<div class="panel">${events.map(x =>
+      `<p class="small" style="margin:7px 0"><b>${esc(x.action)}</b> · ${esc(fmtTime(x.timestamp))}<br>${esc(x.actor)} · ${esc(x.result)}</p>`
+    ).join('')}</div>` : '<p class="sub">Tidak ada event historis yang tercatat di AUDIT.</p>';
+    const ev = await api('listEvidence', { activity_id: id });
+    const holder = $('#historyEvidence'); if (!holder) return;
+    holder.innerHTML = ev.length ? ev.map(e=>`<div class="evrow"><div class="thumb" id="hist_${esc(e.capture_id)}"></div>
+      <div class="small">Diambil: ${esc(fmtTime(e.client_capture_time))}<br>Diterima: ${esc(fmtTime(e.server_received_at))}<br>
+      GPS: ${e.latitude != null ? `${esc(String(e.latitude))}, ${esc(String(e.longitude))} ±${esc(String(e.gps_accuracy))}m` : 'Tidak tersedia'}<br>
+      Jeda upload: ${esc(String(e.upload_delay_min??'—'))} menit<br>${(e.flags||[]).map(flag=>`<span class="flag">${esc(FLAG_LABEL[flag]||flag)}</span>`).join('')}<div style="margin-top:8px">${evidenceMapsLink(e)}</div></div></div>`).join('') : '<p class="sub">Tidak ada foto yang tersimpan di server.</p>';
+    for (const e of ev) {
+      try {
+        const r = await api('getEvidenceImage', { capture_id: e.capture_id }, 45000);
+        const el = document.getElementById('hist_'+e.capture_id);
+        if (el) el.innerHTML = `<button type="button" data-act="zoomImage" data-capture="${esc(e.capture_id)}" aria-label="Perbesar foto bukti" class="thumb-zoom"><img src="data:image/jpeg;base64,${r.data_b64}" alt="Foto bukti; klik untuk memperbesar"></button>`;
+      } catch(err) { const el = document.getElementById('hist_'+e.capture_id); if(el) el.innerHTML = `<span class="sub small">Foto gagal dimuat: ${esc(err.message)}</span>`; }
+    }
+  } catch(err) { const holder = $('#historyEvidence'); if (holder) holder.innerHTML = `<p class="banner err">${esc(err.message)}</p>`; }
+}
+function zoomHistoryImage(btn) {
+  const img = btn && btn.querySelector('img');
+  if (!img || !img.src.startsWith('data:image/jpeg;base64,')) return;
+  const d=$('#dialog');
+  d.innerHTML = `<div class="dlg" style="max-width:min(96vw,1000px);max-height:95vh;overflow:auto">
+    <div class="row" style="justify-content:space-between"><b>Foto bukti (read-only)</b><button class="btn ghost" data-act="zoomClose">Tutup</button></div>
+    <div class="row"><button class="btn ghost" data-act="zoomAdjust" data-d="out">−</button><button class="btn ghost" data-act="zoomAdjust" data-d="reset">Reset</button><button class="btn ghost" data-act="zoomAdjust" data-d="in">+</button></div>
+    <div id="zoomFrame" style="overflow:auto;max-height:70vh;border:1px solid var(--line);touch-action:pan-x pan-y">
+      <img id="zoomPhoto" src="${img.src}" style="display:block;width:100%;max-width:none;height:auto" alt="Foto bukti diperbesar"></div>
+    <p class="sub small">Zoom dengan tombol, lalu geser gambar untuk memeriksa detail.</p></div>`;
+  d.hidden = false; S.zoomLevel=1;
+}
+function closeHistoryZoom() { const d=$('#dialog'); if(d){d.hidden=true;d.innerHTML='';} }
+function adjustHistoryZoom(mode) {
+  const img=$('#zoomPhoto'); if(!img)return;
+  S.zoomLevel=mode==='reset'?1:Math.max(1,Math.min(5,(S.zoomLevel||1)*(mode==='in'?1.5:1/1.5)));
+  img.style.width=(S.zoomLevel*100)+'%';
+}
+// ------------------------------------------------------------ Pengguna
+async function viewUsers(m) {
+  if (needOnline(m, 'Pengguna')) return;
+  m.innerHTML = `<h1>Pengguna</h1><p class="sub">Memuat…</p>`;
+  const [users, recs] = await Promise.all([api('listUsers'), api('listRecoveries').catch(() => [])]);
+  S.userCache = {}; users.forEach(u => { S.userCache[u.email] = u; });
+  S.recCache = {}; recs.forEach(r => { S.recCache[r.request_id] = r; });
+  const REC_LABEL = { PENDING: 'Menunggu', EXECUTING: 'Terhenti di tengah', EXECUTED: 'Dijalankan', REJECTED: 'Ditolak', CANCELLED: 'Dibatalkan', CONTESTED: 'Ditolak pemilik', EXPIRED: 'Kedaluwarsa' };
+  const recHtml = recs.length ? `<h2>Pemulihan akun</h2><div class="tbl users">${recs.map(r => `<div class="u"><div>
+      <b>${esc(r.old_email)}</b> ke <b>${esc(r.new_email)}</b> <span class="tag ${r.status === 'PENDING' ? 'local' : 'solid'}" style="--c:${r.status === 'EXECUTED' ? 'var(--s-ok)' : r.status === 'PENDING' ? 'var(--warn)' : 'var(--s-cancel)'}">${esc(REC_LABEL[r.status] || r.status)}</span>
+      <div class="sub small">Diajukan ${esc(r.requested_by)}, ${esc(fmtTime(r.requested_at))}. Verifikasi: ${esc(r.verification_method)}${r.verification_ref ? ' (' + esc(r.verification_ref) + ')' : ''}.
+      ${r.status === 'PENDING' ? `Paling cepat dijalankan ${esc(fmtTime(r.earliest_exec_at))}.` : ''}
+      ${r.old_account_seen_at ? `<br>Akun lama masih dipakai ${esc(fmtTime(r.old_account_seen_at))}${r.old_owner_confirmed_at ? ', sudah dikonfirmasi pemilik.' : '. Butuh konfirmasi pemilik.'}` : ''}</div></div>
+      <div class="row" style="margin:0">${r.can_approve ? `<button class="btn ok" data-act="recDecide" data-d="APPROVE" data-id="${esc(r.request_id)}">${r.status === 'EXECUTING' ? 'Lanjutkan' : 'Setujui'}</button>` : ''}
+      ${r.can_reject ? `<button class="btn danger" data-act="recDecide" data-d="REJECT" data-id="${esc(r.request_id)}">Tolak</button>` : ''}
+      ${r.can_cancel ? `<button class="btn ghost" data-act="recDecide" data-d="CANCEL" data-id="${esc(r.request_id)}">Batalkan</button>` : ''}</div></div>`).join('')}</div>` : '';
+  const canAdd = (S.profile.manageable_roles || []).length > 0;
+  const bname = c => { const b = S.branches.find(x => x.branch_code === c); return b ? b.branch_name : c; };
+  users.sort((a, b) => LEVEL[b.role] - LEVEL[a.role] || String(a.branch_code).localeCompare(b.branch_code) || String(a.name).localeCompare(b.name));
+  m.innerHTML = `<div class="head"><h1>Pengguna</h1>${canAdd ? `<button class="btn" data-act="newUser">Tambah pengguna</button>` : ''}</div>
+    <p class="sub">Anda dapat mengelola: ${esc((S.profile.manageable_roles || []).join(', ') || 'tidak ada')}${S.profile.role === 'ADMIN' ? ' di semua cabang' : ' di cabang Anda'}. Pengguna level lain hanya dapat dilihat.</p>
+    <div class="tbl users">${users.map(u => `<div class="u"><div><b>${esc(u.name)}</b> ${u.status !== 'ACTIVE' ? `<span class="tag local" style="--c:var(--muted)">Nonaktif</span>` : ''}
+      <div class="sub small">${esc(u.email)}<br>${esc(u.role)}, ${esc(bname(u.branch_code))}</div></div>
+      ${u.can_manage ? `<button class="btn ghost" data-act="editUser" data-email="${esc(u.email)}">Ubah</button>` : ''}</div>`).join('')}</div>${recHtml}`;
+}
+function openUserForm(u) {
+  const roles = S.profile.manageable_roles || [];
+  const isAdmin = S.profile.role === 'ADMIN';
+  const branches = S.branches.filter(b => isAdmin ? b.branch_code !== 'KANWIL' : b.branch_code === S.profile.branch_code);
+  const curBranch = u ? u.branch_code : (isAdmin ? '' : S.profile.branch_code);
+  openSheet(u ? 'Ubah pengguna' : 'Tambah pengguna', `<form data-form="user" class="form">
+    <label class="field"><span>Email Google</span><input type="email" name="email" required maxlength="120" value="${esc(u ? u.email : '')}" ${u ? 'readonly' : ''} placeholder="nama@gmail.com"></label>
+    <label class="field"><span>Nama</span><input name="name" required maxlength="80" value="${esc(u ? u.name : '')}"></label>
+    <label class="field"><span>Peran</span><select name="role">${roles.map(r => `<option ${u && u.role === r ? 'selected' : ''}>${r}</option>`).join('')}</select></label>
+    <label class="field"><span>Cabang</span><select name="branch_code" ${isAdmin ? '' : 'disabled'}>${branches.map(b => `<option value="${esc(b.branch_code)}" ${b.branch_code === curBranch ? 'selected' : ''}>${esc(b.branch_name)}</option>`).join('')}</select></label>
+    <label class="field"><span>Status</span><select name="status"><option value="ACTIVE" ${!u || u.status === 'ACTIVE' ? 'selected' : ''}>Aktif</option><option value="DISABLED" ${u && u.status === 'DISABLED' ? 'selected' : ''}>Nonaktif</option></select></label>
+    ${isAdmin && u ? `<label class="field"><span>Alasan mutasi cabang (wajib jika cabang diubah)</span><textarea name="transfer_reason" rows="2" maxlength="300" placeholder="Contoh: Mutasi unit berdasarkan persetujuan internal"></textarea></label>
+      <label class="field" style="grid-template-columns:auto 1fr;align-items:start"><input type="checkbox" name="offline_queue_confirmed" style="width:auto"><span>Saya sudah mengonfirmasi status bukti offline dengan pengguna; antrean lokal tidak bisa diketahui server.</span></label>` : ''}
+    <input type="hidden" name="version" value="${u ? u.version : ''}">
+    <p class="sub small">Pengguna login dengan akun Google untuk email ini. Menonaktifkan akun langsung menghentikan pengiriman datanya.</p>
+    <button class="btn wide">Simpan pengguna</button></form>
+    ${u ? `<h2>Ajukan pemulihan akun</h2><p class="sub small">Hanya untuk akun Google yang hilang permanen. Lupa password diurus lewat pemulihan akun Google. Permintaan baru dijalankan setelah disetujui pemeriksa kedua (RM/SO: PINCA cabang; CBM/PINCA: ADMIN) dan masa tunggu selesai. Riwayat tetap atas email lama.</p>
+    <form data-form="recovery" class="form">
+      <input type="hidden" name="old_email" value="${esc(u.email)}">
+      <label class="field"><span>Email Google baru</span><input type="email" name="new_email" required maxlength="120" placeholder="nama.baru@gmail.com"></label>
+      <label class="field"><span>Metode verifikasi identitas</span><select name="verification_method">
+        <option value="TATAP_MUKA">Tatap muka dengan kartu identitas pegawai</option>
+        <option value="VIDEO_CALL_TERCATAT">Video call tercatat</option>
+        <option value="TELEPON_NOMOR_RESMI">Telepon ke nomor resmi di data pegawai</option></select></label>
+      <label class="field"><span>Referensi verifikasi (no. memo/tiket)</span><input name="verification_ref" required minlength="3" maxlength="80"></label>
+      <label class="field"><span>Alasan</span><textarea name="reason" rows="2" required maxlength="300"></textarea></label>
+      <label class="field" style="grid-template-columns:auto 1fr;align-items:start"><input type="checkbox" name="attest" required style="width:auto">
+        <span style="font-weight:500">Saya sudah memverifikasi langsung bahwa pemohon adalah pemilik akun ini, dan email baru dikuasai pemohon.</span></label>
+      <button class="btn danger wide">Ajukan pemulihan</button></form>` : ''}`);
+}
+async function requestRecovery(f) {
+  const fd = new FormData(f);
+  await api('requestRecovery', { old_email: fd.get('old_email'), new_email: fd.get('new_email'), verification_method: fd.get('verification_method'),
+    verification_ref: fd.get('verification_ref'), reason: fd.get('reason'), attest: fd.get('attest') === 'on' });
+  toast('Permintaan pemulihan diajukan. Menunggu pemeriksa kedua.'); closeSheet(); renderView();
+}
+async function decideRecovery(id, decision) {
+  const r = (S.recCache || {})[id] || (S.ownerRecovery || []).find(x => x.request_id === id);
+  if (!r) return;
+  const msg = { APPROVE: r.status === 'EXECUTING' ? 'Lanjutkan pemulihan yang terhenti. Langkah yang sudah tersimpan tidak diulang.'
+      : `Akun ${r.old_email} dinonaktifkan dan ${r.new_email} dibuat. Data belum terkirim di HP lama tidak ikut pindah.`,
+    REJECT: 'Permintaan ditolak.', CANCEL: 'Permintaan dibatalkan.', CONTEST: 'Permintaan akan dibatalkan dan pengaju diberi tahu lewat audit.',
+    CONFIRM_OWNER: 'Anda mengonfirmasi bahwa Anda yang meminta pemindahan akun ini. Kirim dulu semua antrean di perangkat ini.' }[decision];
+  const ok = await ask('Lanjutkan?', msg, [{ label: 'Batal', value: false }, { label: 'Lanjutkan', value: true, cls: decision === 'APPROVE' || decision === 'CONFIRM_OWNER' ? 'ok' : 'danger' }]);
+  if (!ok) return;
+  const note = decision === 'REJECT' || decision === 'CONTEST' ? (decision === 'CONTEST' ? 'Ditolak pemilik akun' : 'Ditolak pemeriksa') : '';
+  const res = await api('decideRecovery', { request_id: id, decision, note, version: r.version });
+  if (res.open_activities_old_owner) toast(`Dijalankan. ${res.open_activities_old_owner} aktivitas terbuka tetap atas email lama.`);
+  else toast('Tersimpan.');
+  S.ownerRecovery = (S.ownerRecovery || []).filter(x => x.request_id !== id);
+  renderChrome(); if (S.view === 'users') renderView();
+}
+async function saveUser(f) {
+  const fd = new FormData(f);
+  const data = { email: fd.get('email'), name: fd.get('name'), role: fd.get('role'), status: fd.get('status'),
+    branch_code: S.profile.role === 'ADMIN' ? fd.get('branch_code') : S.profile.branch_code };
+  if (fd.get('version')) data.version = Number(fd.get('version'));
+  if (S.profile.role === 'ADMIN' && fd.get('transfer_reason')) data.transfer_reason = String(fd.get('transfer_reason'));
+  if (S.profile.role === 'ADMIN') data.offline_queue_confirmed = fd.get('offline_queue_confirmed') === 'on';
+  await api('saveUser', data);
+  toast('Pengguna disimpan.'); closeSheet(); renderView();
+}
+
+// ------------------------------------------------------------ Akun
+async function viewAccount(m) {
+  let est = null, persisted = null;
+  try { if (navigator.storage && navigator.storage.estimate) est = await navigator.storage.estimate(); if (navigator.storage && navigator.storage.persisted) persisted = await navigator.storage.persisted(); } catch (e) {}
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const others = await otherAccountsData();
+  m.innerHTML = `<h1>Akun</h1><div class="panel"><dl class="kv">
+    <dt>Nama</dt><dd>${esc(S.profile.name)}</dd><dt>Email</dt><dd>${esc(S.profile.email)}</dd>
+    <dt>Peran</dt><dd>${esc(S.profile.role)}</dd><dt>Cabang</dt><dd>${esc(S.profile.branch_name || S.profile.branch_code)}</dd>
+    <dt>Sesi login</dt><dd>${tokenValid() ? 'Aktif sampai ' + esc(fmtTime(new Date(S.tokenExp).toISOString())) : 'Berakhir'}</dd></dl></div>
+    <h2>Perangkat</h2><div class="panel"><dl class="kv">
+    <dt>Koneksi</dt><dd>${navigator.onLine ? 'Online' : 'Offline'}</dd>
+    <dt>Dibuka sebagai aplikasi</dt><dd>${standalone ? 'Ya' : 'Tidak, tambahkan ke layar utama agar bisa dibuka offline'}</dd>
+    <dt>Penyimpanan</dt><dd>${est ? fmtMB(est.usage || 0) + ' dari ' + fmtMB(est.quota || 0) : 'Tidak diketahui'}</dd>
+    <dt>Penyimpanan permanen</dt><dd>${persisted === null ? 'Tidak diketahui' : persisted ? 'Ya' : 'Belum, browser bisa menghapus data saat ruang menipis'}</dd>
+    <dt>Versi aplikasi</dt><dd>${esc(CFG.BUILD || '-')}</dd></dl>
+    <div class="row"><button class="btn ghost" data-act="health">Cek server</button></div><p class="sub small" id="healthOut"></p></div>
+    ${others.ops.length || others.acts.length ? `<h2>Data akun lain di perangkat ini</h2><div class="panel">
+      <p>${others.pending} data belum terkirim dari ${others.owners.length} akun lain. Isinya tidak ditampilkan dan tidak bisa dikirim oleh akun Anda.</p>
+      <p class="sub small">Jika akun itu dipulihkan ke email baru, data ini tidak ikut pindah. Pemilik lama harus login dan mengirimnya sebelum akunnya dinonaktifkan.</p>
+      <div class="row"><button class="btn danger" data-act="wipeOthers">Hapus data akun lain</button></div></div>` : ''}
+    <div class="row"><button class="btn danger" data-act="logout">Keluar</button></div>`;
+}
+async function checkHealth(el) {
+  el.disabled = true; const out = $('#healthOut'); out.textContent = 'Memeriksa…';
+  const h = await health();
+  out.textContent = h ? `Server aktif, versi ${h.data.version}, jam server ${fmtTime(h.server_time)}.` : 'Server tidak terjangkau.';
+  el.disabled = false;
+}
+
+// ------------------------------------------------------------ Events
+async function onClick(e) {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const id = el.dataset.id;
+  try {
+    switch (el.dataset.act) {
+      case 'nav': S.view = el.dataset.v; render(); window.scrollTo(0, 0); break;
+      case 'range': S.range = el.dataset.v; renderView(); break;
+      case 'sync': runSync(true); break;
+      case 'newAct': openNewAct(); break;
+      case 'openAct': await openAct(id); break;
+      case 'closeSheet': closeSheet(); refreshViewIfQuiet(); break;
+      case 'capture': startCapture(id); break;
+      case 'saveDraft': await saveDraft(id, el.closest('form')); break;
+      case 'cancelAct': await cancelAct(id); break;
+      case 'retryOp': await retryOp(id); break;
+      case 'discardOp': await discardOp(id); break;
+      case 'resendOp': await resendOp(id); break;
+      case 'openReview': await openReview(id); break;
+      case 'openHistory': await openHistory(id); break;
+      case 'zoomImage': zoomHistoryImage(el); break;
+      case 'zoomAdjust': adjustHistoryZoom(el.dataset.d); break;
+      case 'zoomClose': closeHistoryZoom(); break;
+      case 'review': await doReview(id, el.dataset.d, el.closest('form')); break;
+      case 'newUser': openUserForm(null); break;
+      case 'editUser': openUserForm(S.userCache[el.dataset.email]); break;
+      case 'login': openLoginSheet(); break;
+      case 'recoveryHelp': openRecoveryHelp(); break;
+      case 'logout': await logout(); break;
+      case 'health': await checkHealth(el); break;
+      case 'wipeOthers': await wipeOthers(); break;
+      case 'recDecide': case 'ownerRec': await decideRecovery(id, el.dataset.d); break;
+    }
+  } catch (err) { toast(err.message, 'err'); }
+}
+async function onSubmit(e) {
+  const f = e.target.closest('form[data-form]');
+  if (!f) return;
+  e.preventDefault();
+  const btn = f.querySelector('button:not([type=button])');
+  if (btn) btn.disabled = true;
+  try {
+    const k = f.dataset.form;
+    if (k === 'newAct') await saveNewAct(f);
+    else if (k === 'outcome') await submitOutcome(f.dataset.id, f);
+    else if (k === 'user') await saveUser(f);
+    else if (k === 'recovery') await requestRecovery(f);
+    else if (k === 'historyFilter') { const fd=new FormData(f); S.historyFrom=String(fd.get('from')); S.historyTo=String(fd.get('to')); S.historyStatus=String(fd.get('status')||''); if(S.historyFrom>S.historyTo) throw new Error('Tanggal awal tidak boleh setelah tanggal akhir.'); await renderView(); }
+  } catch (err) { toast(err.message, 'err'); }
+  finally { if (btn && document.body.contains(btn)) btn.disabled = false; }
+}
+
+// ------------------------------------------------------------ Boot
+async function init() {
+  if (!CFG.API_URL || /PASTE/.test(CFG.API_URL) || !CFG.GOOGLE_CLIENT_ID || /PASTE/.test(CFG.GOOGLE_CLIENT_ID)) {
+    $('#app').innerHTML = `<div class="login"><h1>Konfigurasi belum diisi</h1><p class="sub">Isi API_URL dan GOOGLE_CLIENT_ID di config.js. Lihat README_SETUP.md.</p></div>`;
+    return;
+  }
+  try { await DB.open(); }
+  catch (e) {
+    $('#app').innerHTML = `<div class="login"><h1>Penyimpanan offline tidak tersedia</h1><p class="sub">${esc(e.message)}. Gunakan Chrome atau Safari terbaru dan jangan pakai mode samaran.</p></div>`;
+    return;
+  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+  S.profile = await getMeta('profile');
+  S.branches = (await getMeta('branches')) || [];
+  S.lastSyncAt = (await getMeta('lastSyncAt')) || 0;
+  const tok = sessionStorage.getItem('activa_tok');
+  if (tok) { const p = decodeJwt(tok); if (p && p.exp * 1000 > Date.now() + 60000) { S.token = tok; S.tokenExp = p.exp * 1000; } }
+
+  window.addEventListener('online', () => { renderChrome(); runSync(false); });
+  window.addEventListener('offline', renderChrome);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') runSync(false); });
+  document.addEventListener('click', onClick);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && $('#zoomPhoto')) closeHistoryZoom(); });
+  document.addEventListener('submit', onSubmit);
+  $('#camInput').addEventListener('change', onCamChange);
+  setInterval(() => runSync(false), 60000);
+
+  if (window.google && google.accounts && google.accounts.id) initGis();
+  else window.onGoogleLibraryLoad = initGis;
+
+  let lastAuthAt = await getMeta('lastAuthAt');
+  if (S.profile && lastAuthAt == null) { lastAuthAt = Date.now(); await setMeta('lastAuthAt', lastAuthAt); } // migrasi dari 0.1.0
+  if (S.profile && !tokenValid() && Date.now() - lastAuthAt > OFFLINE_GRACE_MS) {
+    // Batas pemakaian offline tanpa login ulang. Data tetap di perangkat, tapi tidak ditampilkan.
+    S.profile = null;
+    await pruneOld();
+    return renderLogin(`Login ulang diperlukan: aplikasi sudah lebih dari ${Math.round(OFFLINE_GRACE_MS / 3600000)} jam tanpa login. Data yang belum terkirim tetap aman di perangkat.`);
+  }
+  await pruneOld();
+  render();
+  if (S.profile && tokenValid()) { afterLogin(); }
+}
+if (CFG.__TEST_HOOK__ === true && typeof window.__activaTest === 'function') {
+  window.__activaTest({ S, DB, SYNC, api, runSync, makeOp, myOps, opsForAct, afterLogin, onCredential, doLogout, pruneOld,
+    otherAccountsData, wipeUser, init });
+} else {
+  init();
+}
+})();
+</script>
+</body>
+</html>
